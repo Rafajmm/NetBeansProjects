@@ -10,18 +10,19 @@ public class Mezclar2Arrays {
         }
         return array;
     }
+    
     public static int[] mezclarStrings(int[] primero, int[] segundo){
         int mezcla[]=new int[primero.length+segundo.length],condicion1=primero.length,condicion2=segundo.length,i=0,j=0,k=0;
-        while(j<condicion1 || k<condicion2){
+        while(i<condicion1 || j<condicion2){
             if(i<condicion1){
-                mezcla[i]=primero[j];
-                i++;
-                j++;
-            }
-            if(k<condicion2){
-                mezcla[i]=segundo[k];
-                i++;
+                mezcla[k]=primero[i];
                 k++;
+                i++;
+            }
+            if(j<condicion2){
+                mezcla[k]=segundo[j];
+                k++;
+                j++;
             }
         }        
         return mezcla;      
@@ -30,9 +31,9 @@ public class Mezclar2Arrays {
     
     
     public static void main(String[] args) {
-        int primero[]=generaArray();
-        int segundo[]=generaArray();
-        int mezcla[]=mezclarStrings(primero,segundo);
+        int primero[]=generaArray(),segundo[]=generaArray(),mezcla[]=mezclarStrings(primero,segundo);
+        
+        
         System.out.println(Arrays.toString(primero)+" + "+Arrays.toString(segundo)+" = "+Arrays.toString(mezcla));
     }
     
