@@ -14,6 +14,8 @@ public class Proyecto1Trimestre {
     }
     
     public static char[][] generarMatriz(int fila, int columna){
+        //crea una matriz con las dimensiones indicadas en teclado
+        
       char matriz[][]=new char[fila][columna];      
       for(int i=0;i<fila;i++){
           for(int j=0;j<columna;j++){
@@ -29,7 +31,7 @@ public class Proyecto1Trimestre {
         char simbolo;
         while(cont<=(matriz.length*matriz[0].length)){
             
-            for(int i=0;i<matriz.length;i++){
+            for(int i=0;i<matriz.length/2;i++){
                 for(int j=0;j<matriz[0].length;j++){
                     repetido=false;
                     simbolo=(char)(Math.random()*(127-33)+33);
@@ -38,12 +40,30 @@ public class Proyecto1Trimestre {
                     }
                     if(repetido==false && matriz[i][j]==' '){
                         matriz[i][j]=simbolo;
+                        cont++;
                         
                     }
 
                 }
             }
-            cont++;
+            
+            for(int i=matriz.length-1;i>matriz.length/2;i++){
+                for(int j=0;j<matriz[0].length;j++){
+                    repetido=false;
+                    simbolo=(char)(Math.random()*(127-33)+33);
+                    if(matriz[i][j]==simbolo){
+                        repetido=true;
+                    }
+                    if(repetido==false && matriz[i][j]==' '){
+                        matriz[i][j]=simbolo;
+                        cont++;
+                        
+                    }
+
+                }
+            }
+            
+            
         }
         return matriz;
     }
