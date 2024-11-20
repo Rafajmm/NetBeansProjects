@@ -14,26 +14,45 @@ public class Proyecto1Trimestre {
     }
     
     public static char[][] generarMatriz(int fila, int columna){
-      char matriz[][]=new char[fila][columna];
-      char simbolos[]=new char[0];
-      int pos=0;
-      for(int i=33;i<127;i++){
-          simbolos=Arrays.copyOf(simbolos,simbolos.length+1);
-          simbolos[pos]=(char)i;
-          System.out.println(simbolos);
-      }
+      char matriz[][]=new char[fila][columna];      
       for(int i=0;i<fila;i++){
           for(int j=0;j<columna;j++){
-              matriz[i][j]=(char)(Math.random()*(127-33)+33);
+              matriz[i][j]=' ';
           }
       }
       return matriz;
     }
     
+    public static char[][] rellenarMatriz(char matriz[][]){
+        int cont=0,pos1,pos2;
+        boolean repetido=false;
+        char simbolo;
+        while(cont<=(matriz.length*matriz[0].length)){
+            
+            for(int i=0;i<matriz.length;i++){
+                for(int j=0;j<matriz[0].length;j++){
+                    repetido=false;
+                    simbolo=(char)(Math.random()*(127-33)+33);
+                    if(matriz[i][j]==simbolo){
+                        repetido=true;
+                    }
+                    if(repetido==false && matriz[i][j]==' '){
+                        matriz[i][j]=simbolo;
+                        
+                    }
+
+                }
+            }
+            cont++;
+        }
+        return matriz;
+    }
+    
     public static void main(String[] args) {
         boolean salir=false;
         char opcion;
-        String matriz;
+        char matriz[][];
+        int fila=-1,columna=-1;
         Scanner leerC=new Scanner(System.in);
         Scanner leerN=new Scanner(System.in);
         
@@ -42,13 +61,23 @@ public class Proyecto1Trimestre {
             opcion=leerC.next().charAt(0);
             switch(opcion){
                 
-                case 'a': 
+                case 'a':
+                    while((fila*columna)%2!=0){
+                        System.out.println("Primero debes elegir las dimensiones del tablero. Recuerda que necesitamos una cantidad de celdas par.");
+                        System.out.println("Introduce el número de filas: ");
+                        fila=leerN.nextInt();
+                        System.out.println("Introduce el número de columnas");
+                        columna=leerN.nextInt();
+                        if(fila*columna!=0){
+                            System.out.println("Las dimensiones introducidas no son válidas.");
+                        }
+                    }
                     
                 break;
                 
                 case 'e': 
-                    matriz=Arrays.toString(generarMatriz(3,4));
-                    System.out.println(matriz);
+                    matriz=rellenarMatriz(generarMatriz(fila,columna));
+                    System.out.println(Arrays.deepToString(matriz));
                 break;
                 
                 case 's': salir=true;
