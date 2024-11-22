@@ -14,7 +14,7 @@ public class Proyecto1Trimestre {
     }
     
     public static char[][] generarMatriz(int fila, int columna){
-        //crea una matriz con las dimensiones indicadas en teclado
+        //crea una matriz con las dimensiones por defecto o las indicadas por el usuario
         
       char matriz[][]=new char[fila][columna];      
       for(int i=0;i<fila;i++){
@@ -25,46 +25,52 @@ public class Proyecto1Trimestre {
       return matriz;
     }
     
-    public static char[][] rellenarMatriz(char matriz[][]){
-        int cont=0,pos1,pos2;
-        boolean repetido=false;
-        char simbolo;
-        while(cont<=(matriz.length*matriz[0].length)){
+    public static char[] simbolos(int fila,int columna){
+        //con esta función genero un array char en el que voy a guardar de forma aleatoria los simbolos para rellenar la matriz.
+        
+        int cont=0,i,numsim=(fila*columna)/2;
+        char conjunto[]=new char[numsim],simbolo;
+        boolean repetido;
+        
+        while(cont<numsim){
             
-            for(int i=0;i<matriz.length/2;i++){
-                for(int j=0;j<matriz[0].length;j++){
-                    repetido=false;
-                    simbolo=(char)(Math.random()*(127-33)+33);
-                    if(matriz[i][j]==simbolo){
-                        repetido=true;
-                    }
-                    if(repetido==false && matriz[i][j]==' '){
-                        matriz[i][j]=simbolo;
-                        cont++;
-                        
-                    }
-
+            simbolo=(char)(Math.random()*(127-33)+33);          
+            repetido=false;
+            i=0;
+            
+            while(i<cont){
+                if(conjunto[i]==simbolo){
+                    repetido=true;
                 }
+                i++;
             }
             
-            for(int i=matriz.length-1;i>matriz.length/2;i++){
-                for(int j=0;j<matriz[0].length;j++){
-                    repetido=false;
-                    simbolo=(char)(Math.random()*(127-33)+33);
-                    if(matriz[i][j]==simbolo){
-                        repetido=true;
-                    }
-                    if(repetido==false && matriz[i][j]==' '){
-                        matriz[i][j]=simbolo;
-                        cont++;
-                        
-                    }
-
-                }
+            if(repetido==false){
+                conjunto[cont]=simbolo;
+                cont++;
             }
-            
             
         }
+        return conjunto;
+    }
+    public static char[][] rellenarMatriz(char matriz[][], char conjunto[]){
+        int numsim=conjunto.length,cont=0;
+        
+        while(cont<numsim){
+            
+            for(int i=0;i<matriz.length;i++){
+                for(int j=0;j<matriz[0].length;j++){
+                    
+                    matriz[i][j]=conjunto[cont];
+                    cont++;
+                    
+                }
+            
+        }
+            
+        }
+        
+        
         return matriz;
     }
     
@@ -96,7 +102,7 @@ public class Proyecto1Trimestre {
                 break;
                 
                 case 'e': 
-                    matriz=rellenarMatriz(generarMatriz(fila,columna));
+                    matriz=(rellenarMatriz(generarMatriz(fila,columna),simbolos(fila,columna)));
                     System.out.println(Arrays.deepToString(matriz));
                 break;
                 
