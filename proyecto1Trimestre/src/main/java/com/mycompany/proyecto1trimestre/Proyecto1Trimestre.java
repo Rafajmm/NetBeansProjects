@@ -26,45 +26,27 @@ public class Proyecto1Trimestre {
     }
     
     public static char[][] rellenarMatriz(char matriz[][]){
-        int cont=0,pos1,pos2;
         boolean repetido=false;
+        int cont=0,pos1=matriz.length-1,pos2=matriz[0].length-1;
         char simbolo;
-        while(cont<=(matriz.length*matriz[0].length)){
-            
-            for(int i=0;i<matriz.length/2;i++){
-                for(int j=0;j<matriz[0].length;j++){
+        while(cont<(matriz.length*matriz[0].length)){
+            simbolo=(char)(Math.random()*(48-33)+33);
+            System.out.println(simbolo);
+            repetido=true;
+            for(int i=0;i<matriz.length;i++){
+                for(int j=0;j<matriz[0].length;j++){                    
                     repetido=false;
-                    simbolo=(char)(Math.random()*(127-33)+33);
-                    if(matriz[i][j]==simbolo){
-                        repetido=true;
-                    }
-                    if(repetido==false && matriz[i][j]==' '){
-                        matriz[i][j]=simbolo;
-                        cont++;
+                    if(simbolo==matriz[i][j]){
                         
                     }
-
-                }
-            }
-            
-            for(int i=matriz.length-1;i>matriz.length/2;i++){
-                for(int j=0;j<matriz[0].length;j++){
-                    repetido=false;
-                    simbolo=(char)(Math.random()*(127-33)+33);
-                    if(matriz[i][j]==simbolo){
-                        repetido=true;
-                    }
-                    if(repetido==false && matriz[i][j]==' '){
+                    if(repetido==false){
                         matriz[i][j]=simbolo;
-                        cont++;
                         
                     }
-
-                }
-            }
-            
-            
-        }
+                }               
+            }            
+            cont++;
+        }        
         return matriz;
     }
     
@@ -72,7 +54,7 @@ public class Proyecto1Trimestre {
         boolean salir=false;
         char opcion;
         char matriz[][];
-        int fila=-1,columna=-1;
+        int fila=3,columna=4;
         Scanner leerC=new Scanner(System.in);
         Scanner leerN=new Scanner(System.in);
         
@@ -96,6 +78,7 @@ public class Proyecto1Trimestre {
                 break;
                 
                 case 'e': 
+                    
                     matriz=rellenarMatriz(generarMatriz(fila,columna));
                     System.out.println(Arrays.deepToString(matriz));
                 break;
