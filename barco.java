@@ -2,10 +2,7 @@ package hundirlaflota;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author Fermín Ortega Domínguez
- */
+
 public class barco {
     private String nombre;
     private int tamano;

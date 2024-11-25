@@ -14,7 +14,7 @@ public class Proyecto1Trimestre {
     }
     
     public static char[][] generarMatriz(int fila, int columna){
-        //crea una matriz con las dimensiones indicadas en teclado
+        //crea una matriz con las dimensiones por defecto o las indicadas por el usuario
         
       char matriz[][]=new char[fila][columna];      
       for(int i=0;i<fila;i++){
@@ -25,6 +25,7 @@ public class Proyecto1Trimestre {
       return matriz;
     }
     
+<<<<<<< HEAD
     public static char[][] rellenarMatriz(char matriz[][]){
         boolean repetido=false;
         int cont=0,pos1=matriz.length-1,pos2=matriz[0].length-1;
@@ -47,6 +48,54 @@ public class Proyecto1Trimestre {
             }            
             cont++;
         }        
+=======
+    public static char[] simbolos(int fila,int columna){
+        //con esta función genero un array char en el que voy a guardar de forma aleatoria los simbolos para rellenar la matriz.
+        
+        int cont=0,i,numsim=(fila*columna)/2;
+        char conjunto[]=new char[numsim],simbolo;
+        boolean repetido;
+        
+        while(cont<numsim){
+            
+            simbolo=(char)(Math.random()*(127-33)+33);          
+            repetido=false;
+            i=0;
+            
+            while(i<cont){
+                if(conjunto[i]==simbolo){
+                    repetido=true;
+                }
+                i++;
+            }
+            
+            if(repetido==false){
+                conjunto[cont]=simbolo;
+                cont++;
+            }
+            
+        }
+        return conjunto;
+    }
+    public static char[][] rellenarMatriz(char matriz[][], char conjunto[]){
+        int numsim=conjunto.length,cont=0;
+        
+        while(cont<numsim){
+            
+            for(int i=0;i<matriz.length;i++){
+                for(int j=0;j<matriz[0].length;j++){
+                    
+                    matriz[i][j]=conjunto[cont];
+                    cont++;
+                    
+                }
+            
+        }
+            
+        }
+        
+        
+>>>>>>> 032a454ca91176ece21e529439d05b784d03169c
         return matriz;
     }
     
@@ -78,8 +127,12 @@ public class Proyecto1Trimestre {
                 break;
                 
                 case 'e': 
+<<<<<<< HEAD
                     
                     matriz=rellenarMatriz(generarMatriz(fila,columna));
+=======
+                    matriz=(rellenarMatriz(generarMatriz(fila,columna),simbolos(fila,columna)));
+>>>>>>> 032a454ca91176ece21e529439d05b784d03169c
                     System.out.println(Arrays.deepToString(matriz));
                 break;
                 
