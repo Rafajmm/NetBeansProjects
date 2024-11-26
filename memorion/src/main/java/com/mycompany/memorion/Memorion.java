@@ -23,8 +23,7 @@ public class Memorion {
             }
         }
       
-        //rellena la matriz 
-        rellenarMatriz(matriz,simbolos(fila,columna));
+        
         return matriz;
     }
     
@@ -110,34 +109,50 @@ public class Memorion {
             
     }
     
+    public static int[] jugar(char matriz[][],char mjuego[][],int fila,int columna,int fila2,int columna2,int[] contJ){
+        
+        if(mjuego[fila][columna]!=' ' || mjuego[fila2][columna2]!=' '){
+            System.out.println("No puedes seleccionar una casilla que ya has descubierto.");
+            
+            
+        }
+        
+        else{
+            mjuego[fila][columna]=matriz[fila][columna];
+            mjuego[fila2][columna2]=matriz[fila2][columna2];
+            imprimirJugar(mjuego);
+            if(matriz[fila][columna]!=matriz[fila2][columna2]){
+                mjuego[fila][columna]=' ';
+                mjuego[fila2][columna2]=' ';
+                contJ[1]--;
+            }
+            else{
+                contJ[0]++;
+            }
+            
+        }
+            
+        return contJ;
+    }
     
-    public static void imprimirJugar(char matriz[][],char mjuego[][],int fila,int columna,int fila2,int columna2){
+    public static void imprimirJugar(char mjuego[][]){
     //Imprime la matriz
     
-        for (int i=0;i<matriz[0].length;i++){
+        for (int i=0;i<mjuego[0].length;i++){
             System.out.print(" -------");
         }
         System.out.println();
-        if(matriz[fila][columna]==matriz[fila2][columna2]){
-            mjuego[fila][columna]=matriz[fila][columna];
-            mjuego[fila2][columna2]=matriz[fila2][columna2];
-                    }
-        for(int i=0;i<matriz.length;i++){
-            for(int j=0;j<matriz[0].length;j++){
+        
+        
+        for(int i=0;i<mjuego.length;i++){
+            for(int j=0;j<mjuego[0].length;j++){       
                 
-                if((fila==i && columna==j) || (fila2==i && columna2==j)){
-                    System.out.print("|"+matriz[i][j]+"\t");
-                    
-                    
-                }
+                System.out.print("|"+mjuego[i][j]+"\t");
                 
-                else{
-                    System.out.print("|"+mjuego[i][j]+"\t");
-                }
             }    
             System.out.println("|");
             System.out.println();
-            for (int k=0;k<matriz[0].length;k++){
+            for (int k=0;k<mjuego[0].length;k++){
                 System.out.print(" -------");
             }
             System.out.println();
@@ -154,12 +169,7 @@ public class Memorion {
         System.out.print("\033[H\033[2J"); // Secuencia ANSI
         System.out.flush();
     }
-//    public static void jugar(){
-//        boolean terminar=false;
-//        while(!false){
-//
-//        }
-//    }
+
     
     public static void main(String[] args) {
         boolean salir=false,opcond;
@@ -202,13 +212,19 @@ public class Memorion {
                 break;
                 
                 case 'e':
-                    char mjuego[][]=new char[fila][columna];
+                    char mjuego[][]=generarMatriz(fila,columna);
+                    char simbolos[]=simbolos(fila,columna);
                     boolean terminar=false;
-                    int efila1,ecolumna1,efila2,ecolumna2;
-                    matriz=generarMatriz(fila,columna);
+                    int pareja=(fila*columna)/2;
+                    int efila1,ecolumna1,efila2,ecolumna2,contJ[]={0,(pareja+(pareja/2))};
+                    matriz=rellenarMatriz(generarMatriz(fila,columna),simbolos);
                     imprimir(matriz);
                     
+                    System.out.println("Comienza el juego. Tienes "+contJ[1]+" intentos.");
+                    
                     while(!terminar){
+                        
+                        imprimirJugar(mjuego);
                         System.out.println("introduce la fila de tu primera elección");
                         efila1=leerN.nextInt()-1;
                         System.out.println("introduce la fila de tu primera elección");
@@ -218,9 +234,18 @@ public class Memorion {
                         System.out.println("introduce la fila de tu primera elección");
                         ecolumna2=leerN.nextInt()-1;
                         
-                        imprimirJugar(matriz,mjuego,efila1,ecolumna1,efila2,ecolumna2);
-                        System.out.println(Arrays.deepToString(mjuego));
+                        contJ=jugar(matriz,mjuego,efila1,ecolumna1,efila2,ecolumna2,contJ);
+                        System.out.println("Llevas "+contJ[0]+" parejas encontradas.");
+                        System.out.println("Te quedan "+contJ[1]+" intentos");
                         
+                        if(contJ[0]==pareja){
+                            System.out.println("¡Has ganado!");
+                            terminar=true;
+                        }
+                        if(contJ[1]==0){
+                            System.out.println("¡Has perdido!");
+                            terminar=true;
+                        }
                     }
                     
                     
