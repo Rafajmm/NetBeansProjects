@@ -25,30 +25,6 @@ public class Proyecto1Trimestre {
       return matriz;
     }
     
-<<<<<<< HEAD
-    public static char[][] rellenarMatriz(char matriz[][]){
-        boolean repetido=false;
-        int cont=0,pos1=matriz.length-1,pos2=matriz[0].length-1;
-        char simbolo;
-        while(cont<(matriz.length*matriz[0].length)){
-            simbolo=(char)(Math.random()*(48-33)+33);
-            System.out.println(simbolo);
-            repetido=true;
-            for(int i=0;i<matriz.length;i++){
-                for(int j=0;j<matriz[0].length;j++){                    
-                    repetido=false;
-                    if(simbolo==matriz[i][j]){
-                        
-                    }
-                    if(repetido==false){
-                        matriz[i][j]=simbolo;
-                        
-                    }
-                }               
-            }            
-            cont++;
-        }        
-=======
     public static char[] simbolos(int fila,int columna){
         //con esta función genero un array char en el que voy a guardar de forma aleatoria los simbolos para rellenar la matriz.
         
@@ -95,7 +71,6 @@ public class Proyecto1Trimestre {
         }
         
         
->>>>>>> 032a454ca91176ece21e529439d05b784d03169c
         return matriz;
     }
     
@@ -103,7 +78,7 @@ public class Proyecto1Trimestre {
         boolean salir=false;
         char opcion;
         char matriz[][];
-        int fila=3,columna=4;
+        int fila=-1,columna=-1;
         Scanner leerC=new Scanner(System.in);
         Scanner leerN=new Scanner(System.in);
         
@@ -127,12 +102,7 @@ public class Proyecto1Trimestre {
                 break;
                 
                 case 'e': 
-<<<<<<< HEAD
-                    
-                    matriz=rellenarMatriz(generarMatriz(fila,columna));
-=======
                     matriz=(rellenarMatriz(generarMatriz(fila,columna),simbolos(fila,columna)));
->>>>>>> 032a454ca91176ece21e529439d05b784d03169c
                     System.out.println(Arrays.deepToString(matriz));
                 break;
                 
