@@ -110,26 +110,34 @@ public class Memorion {
     }
     
     public static int[] jugar(char matriz[][],char mjuego[][],int fila,int columna,int fila2,int columna2,int[] contJ){
+        int posminima=0;
         
-        if(mjuego[fila][columna]!=' ' || mjuego[fila2][columna2]!=' '){
-            System.out.println("No puedes seleccionar una casilla que ya has descubierto.");
-            
-            
+        if(fila<posminima || fila2<posminima || columna<posminima || columna2<posminima || fila>=matriz.length || fila2>=matriz.length || columna>=matriz[0].length || columna2>=matriz[0].length){
+            System.out.println("Has seleccionado alguna posición fuera de rango");
         }
         
+        else if(fila==fila2 && columna==columna2){
+            System.out.println("Has seleccionado dos veces la misma casilla");
+        }
+         
+        else if(mjuego[fila][columna]!=' ' || mjuego[fila2][columna2]!=' '){
+            System.out.println("No puedes seleccionar una casilla que ya has descubierto.");
+        }
+
         else{
             mjuego[fila][columna]=matriz[fila][columna];
             mjuego[fila2][columna2]=matriz[fila2][columna2];
             imprimirJugar(mjuego);
+            
             if(matriz[fila][columna]!=matriz[fila2][columna2]){
                 mjuego[fila][columna]=' ';
                 mjuego[fila2][columna2]=' ';
                 contJ[1]--;
             }
+            
             else{
                 contJ[0]++;
             }
-            
         }
             
         return contJ;
@@ -137,23 +145,29 @@ public class Memorion {
     
     public static void imprimirJugar(char mjuego[][]){
     //Imprime la matriz
-    
+        
+        for(int i=0;i<mjuego[0].length;i++){
+            System.out.print("     "+(i+1)+"   ");
+        }
+        System.out.println();
+        
         for (int i=0;i<mjuego[0].length;i++){
-            System.out.print(" -------");
+            System.out.print("  --------");
         }
         System.out.println();
         
         
         for(int i=0;i<mjuego.length;i++){
+            System.out.print((i+1)+"|");
             for(int j=0;j<mjuego[0].length;j++){       
                 
-                System.out.print("|"+mjuego[i][j]+"\t");
+                System.out.print("    "+mjuego[i][j]+"    |");
                 
             }    
-            System.out.println("|");
+            
             System.out.println();
             for (int k=0;k<mjuego[0].length;k++){
-                System.out.print(" -------");
+                System.out.print("  --------");
             }
             System.out.println();
         }
@@ -166,8 +180,19 @@ public class Memorion {
     }
     
     public static void limpiarPantalla() {
-        System.out.print("\033[H\033[2J"); // Secuencia ANSI
-        System.out.flush();
+        try {  
+              final String os = System.getProperty("os.name");
+              System.out.println(os);
+              if (os.contains("Windows")) {  
+                Runtime.getRuntime().exec("cls");  
+            }
+            else {  
+                Runtime.getRuntime().exec("clear");  
+            } 
+        }  
+        catch (final Exception e) {  
+            e.printStackTrace();  
+        }
     }
 
     
