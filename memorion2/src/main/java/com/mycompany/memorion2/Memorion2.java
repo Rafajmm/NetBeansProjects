@@ -87,13 +87,22 @@ public class Memorion2 {
     }
 
     public static void imprimir(char matriz[][]) {
-    // Imprime la matriz dentro de una tabla con bordes
-
+        // Imprime la matriz dentro de una tabla con bordes
         int filas = matriz.length;
         int columnas = matriz[0].length;
 
+        // Línea superior con numeración de columnas
+        System.out.print("    "); // Espacio para alinear las filas
+        for (int i = 0; i < columnas; i++) {
+            System.out.print(" " + i + " "); // Imprime el número de cada columna
+            if (i < columnas - 1) {
+                System.out.print("│"); // Separador de columnas
+            }
+        }
+        System.out.println();
+
         // Línea superior de la tabla
-        System.out.print("┌");
+        System.out.print("   ┌");
         for (int i = 0; i < columnas; i++) {
             System.out.print("───");
             if (i < columnas - 1) {
@@ -104,7 +113,7 @@ public class Memorion2 {
 
         // Filas de la tabla
         for (int i = 0; i < filas; i++) {
-            System.out.print("│");
+            System.out.print(" " + i + " │"); // Numeración de las filas al inicio
             for (int j = 0; j < columnas; j++) {
                 System.out.print(" " + matriz[i][j] + " ");
                 System.out.print("│");
@@ -113,7 +122,7 @@ public class Memorion2 {
 
             // Línea intermedia o inferior
             if (i < filas - 1) {
-                System.out.print("├");
+                System.out.print("   ├");
                 for (int j = 0; j < columnas; j++) {
                     System.out.print("───");
                     if (j < columnas - 1) {
@@ -125,7 +134,7 @@ public class Memorion2 {
         }
 
         // Línea inferior de la tabla
-        System.out.print("└");
+        System.out.print("   └");
         for (int i = 0; i < columnas; i++) {
             System.out.print("───");
             if (i < columnas - 1) {
@@ -134,6 +143,7 @@ public class Memorion2 {
         }
         System.out.println("┘");
     }
+
 
     // Limpia la pantalla en terminales compatibles con ANSI
     public static void limpiarPantalla() {

@@ -1,7 +1,7 @@
-package com.mycompany.memorion;
+package com.mycompany.memorion3;
 import java.util.*;
 
-public class Memorion {
+public class Memorion3 {
 
     public static void menu(){
         System.out.println("MEMORIÓN");
@@ -108,23 +108,32 @@ public class Memorion {
         }
             
     }
-    
-    public static int[] jugar(char matriz[][],char mjuego[][],int fila,int columna,int fila2,int columna2,int[] contJ){
-        int posminima=0;
+    public static boolean condiciones(char mjuego[][],int coordenadas[]){
+        int posminima=0, fila=coordenadas[0],fila2=coordenadas[2],columna=coordenadas[1],columna2=coordenadas[3];
+        boolean condicion=true;
         
-        if(fila<posminima || fila2<posminima || columna<posminima || columna2<posminima || fila>=matriz.length || fila2>=matriz.length || columna>=matriz[0].length || columna2>=matriz[0].length){
+        if(fila<posminima || fila2<posminima ||columna<posminima || columna2<posminima || fila>=mjuego.length || fila2>=mjuego.length || columna>=mjuego[0].length || columna2>=mjuego[0].length){
             System.out.println("Has seleccionado alguna posición fuera de rango");
+            condicion=false;
         }
         
         else if(fila==fila2 && columna==columna2){
             System.out.println("Has seleccionado dos veces la misma casilla");
+            condicion=false;
         }
          
         else if(mjuego[fila][columna]!=' ' || mjuego[fila2][columna2]!=' '){
             System.out.println("No puedes seleccionar una casilla que ya has descubierto.");
+            condicion=false;
         }
+        
+        return condicion;
+    }
+    
+    public static int[] jugar(char matriz[][],char mjuego[][],int coordenadas[],int[] contJ){
+        int fila=coordenadas[0],fila2=coordenadas[2],columna=coordenadas[1],columna2=coordenadas[3]; 
 
-        else{
+        if(condiciones(mjuego,coordenadas)){
             mjuego[fila][columna]=matriz[fila][columna];
             mjuego[fila2][columna2]=matriz[fila2][columna2];
             imprimirJugar(mjuego);
@@ -241,7 +250,7 @@ public class Memorion {
                     char simbolos[]=simbolos(fila,columna);
                     boolean terminar=false;
                     int pareja=(fila*columna)/2;
-                    int efila1,ecolumna1,efila2,ecolumna2,contJ[]={0,(pareja+(pareja/2))};
+                    int efila1,ecolumna1,efila2,ecolumna2,contJ[]={0,(pareja+(pareja/2))},coordenadas[]=new int[4];
                     matriz=rellenarMatriz(generarMatriz(fila,columna),simbolos);
                     imprimir(matriz);
                     
@@ -251,15 +260,15 @@ public class Memorion {
                         
                         imprimirJugar(mjuego);
                         System.out.println("introduce la fila de tu primera elección");
-                        efila1=leerN.nextInt()-1;
+                        coordenadas[0]=leerN.nextInt()-1;
                         System.out.println("introduce la fila de tu primera elección");
-                        ecolumna1=leerN.nextInt()-1;
+                        coordenadas[1]=leerN.nextInt()-1;
                         System.out.println("introduce la fila de tu primera elección");
-                        efila2=leerN.nextInt()-1;
+                        coordenadas[2]=leerN.nextInt()-1;
                         System.out.println("introduce la fila de tu primera elección");
-                        ecolumna2=leerN.nextInt()-1;
+                        coordenadas[3]=leerN.nextInt()-1;
                         
-                        contJ=jugar(matriz,mjuego,efila1,ecolumna1,efila2,ecolumna2,contJ);
+                        contJ=jugar(matriz,mjuego,coordenadas,contJ);
                         System.out.println("Llevas "+contJ[0]+" parejas encontradas.");
                         System.out.println("Te quedan "+contJ[1]+" intentos");
                         

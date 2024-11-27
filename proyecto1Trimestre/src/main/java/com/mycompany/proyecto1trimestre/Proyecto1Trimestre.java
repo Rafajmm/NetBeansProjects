@@ -74,6 +74,8 @@ public class Proyecto1Trimestre {
         return matriz;
     }
     
+   
+    
     public static void main(String[] args) {
         boolean salir=false;
         char opcion;
@@ -103,6 +105,7 @@ public class Proyecto1Trimestre {
                 
                 case 'e': 
                     matriz=(rellenarMatriz(generarMatriz(fila,columna),simbolos(fila,columna)));
+                    
                     System.out.println(Arrays.deepToString(matriz));
                 break;
                 
