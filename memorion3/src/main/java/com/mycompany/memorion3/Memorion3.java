@@ -13,12 +13,12 @@ public class Memorion3 {
         System.out.println("Pulsa 's' para salir");
     }
     
-    public static char[][] generarMatriz(int fila, int columna){
+    public static char[][] generarMatriz(int ajustes[]){
     // Genera una matriz con las dimensiones por defecto o las indicadas por el usuario y la rellena con parejas de símbolos aleatorios
-        char matriz[][]=new char[fila][columna];      
+        char matriz[][]=new char[ajustes[0]][ajustes[1]];      
         
-        for(int i=0;i<fila;i++){
-            for(int j=0;j<columna;j++){
+        for(int i=0;i<ajustes[0];i++){
+            for(int j=0;j<ajustes[1];j++){
             matriz[i][j]=' ';
             }
         }
@@ -27,10 +27,10 @@ public class Memorion3 {
         return matriz;
     }
     
-    public static char[] simbolos(int fila,int columna){
+    public static char[] simbolos(int ajustes[]){
     // Genera un array con parejas de símbolos aleatorios 
         
-        int cont=0,i,numsim=(fila*columna);
+        int cont=0,i,numsim=(ajustes[0]*ajustes[1]);
         char conjunto[]=new char[numsim],simbolo;
         boolean repetido;
         
@@ -94,20 +94,16 @@ public class Memorion3 {
         return matriz;
     }
     
-    public static void imprimir(char matriz[][]){
-    //Imprime la matriz
+    public static void comprobarContenido(char matriz[][]){
     
         for(int i=0;i<matriz.length;i++){
             for(int j=0;j<matriz[0].length;j++){
-                System.out.print(matriz[i][j]+"\t");            
-                        
-                
-            }
-                
+                System.out.print(matriz[i][j]+"\t");               
+            }                
             System.out.println();
-        }
-            
+        }            
     }
+    
     public static boolean condiciones(char mjuego[][],int coordenadas[]){
         int posminima=0, fila=coordenadas[0],fila2=coordenadas[2],columna=coordenadas[1],columna2=coordenadas[3];
         boolean condicion=true;
@@ -130,13 +126,27 @@ public class Memorion3 {
         return condicion;
     }
     
-    public static int[] jugar(char matriz[][],char mjuego[][],int coordenadas[],int[] contJ){
+    
+    
+    public static int[] jugar(char matriz[][],char mjuego[][],int coordenadas[],int[] contJ,int ajustes[]){
         int fila=coordenadas[0],fila2=coordenadas[2],columna=coordenadas[1],columna2=coordenadas[3]; 
 
         if(condiciones(mjuego,coordenadas)){
             mjuego[fila][columna]=matriz[fila][columna];
             mjuego[fila2][columna2]=matriz[fila2][columna2];
             imprimirJugar(mjuego);
+            
+            try {
+            //pausa de 5 segundos antes de limpiar la pantalla
+                Thread.sleep(ajustes[2]);  
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();  
+            }
+            
+            
+            limpiarPantalla();
+            
             
             if(matriz[fila][columna]!=matriz[fila2][columna2]){
                 mjuego[fila][columna]=' ';
@@ -179,37 +189,41 @@ public class Memorion3 {
                 System.out.print("  --------");
             }
             System.out.println();
-        }
-        
-        
-        
-        
-        
-        
+        }       
     }
     
     public static void limpiarPantalla() {
-        try {  
-              final String os = System.getProperty("os.name");
-              System.out.println(os);
-              if (os.contains("Windows")) {  
-                Runtime.getRuntime().exec("cls");  
+        
+        try {
+            final String os = System.getProperty("os.name");
+
+            ProcessBuilder processBuilder;
+            if (os.contains("Windows")) {
+                // En Windows, ejecutamos el comando 'cls'
+                processBuilder = new ProcessBuilder("cmd", "/c", "cls");
+            } else {
+                // En sistemas Unix (Linux, macOS), ejecutamos 'clear'
+                processBuilder = new ProcessBuilder("clear");
             }
-            else {  
-                Runtime.getRuntime().exec("clear");  
-            } 
-        }  
-        catch (final Exception e) {  
-            e.printStackTrace();  
+
+            // Inicia el proceso
+            processBuilder.inheritIO().start();
+
+        } 
+        
+        catch (final Exception e) {
+            e.printStackTrace();
         }
     }
 
+
     
     public static void main(String[] args) {
-        boolean salir=false,opcond;
+        boolean salir=false,opajus;
         char opcion;
         char matriz[][];
-        int fila=3,columna=4; //Dimensiones predeterminadas
+        int ajustes[]={3,4,5000};
+        int fila=3,columna=4,segundos; //Dimensiones predeterminadas
         Scanner leerC=new Scanner(System.in);
         Scanner leerN=new Scanner(System.in);
         
@@ -225,34 +239,47 @@ public class Memorion3 {
                 
                 case 'a':
                     
-                    opcond=false;
+                    opajus=false;
                     System.out.println("Primero debes elegir las dimensiones del tablero.");
                     System.out.println("Recuerda que necesitamos una cantidad de celdas par.");
                     
-                    while(!opcond){
+                    while(!opajus){
                         
                         System.out.println("Introduce el número de filas: ");
                         fila=leerN.nextInt();
                         System.out.println("Introduce el número de columnas");
                         columna=leerN.nextInt();
-                        if((fila*columna)%2!=0 || fila<=0 || columna<=0){
+                        if((fila*columna)%2!=0 || (fila*columna)>120 || fila<=0 || columna<=0){
                             System.out.println("¡Las dimensiones introducidas no son válidas!");
                         }
                         else{
-                            opcond=true;
+                            ajustes[0]=fila;
+                            ajustes[1]=columna;
+                            opajus=true;
                         }
                     }
+                    
+                    opajus=false;
+                    
+                    while(!opajus){
+                        System.out.println("Ahora introduce el tiempo de visualizacion en segundos");
+                        segundos=leerN.nextInt()*1000;
+                        ajustes[2]=segundos;
+                        opajus=true;
+                    }
+                    
+                    
                     
                 break;
                 
                 case 'e':
-                    char mjuego[][]=generarMatriz(fila,columna);
-                    char simbolos[]=simbolos(fila,columna);
+                    char mjuego[][]=generarMatriz(ajustes);
+                    char simbolos[]=simbolos(ajustes);
                     boolean terminar=false;
-                    int pareja=(fila*columna)/2;
+                    int pareja=(ajustes[0]*ajustes[1])/2;
                     int efila1,ecolumna1,efila2,ecolumna2,contJ[]={0,(pareja+(pareja/2))},coordenadas[]=new int[4];
-                    matriz=rellenarMatriz(generarMatriz(fila,columna),simbolos);
-                    imprimir(matriz);
+                    matriz=rellenarMatriz(generarMatriz(ajustes),simbolos);
+                    comprobarContenido(matriz);
                     
                     System.out.println("Comienza el juego. Tienes "+contJ[1]+" intentos.");
                     
@@ -261,14 +288,14 @@ public class Memorion3 {
                         imprimirJugar(mjuego);
                         System.out.println("introduce la fila de tu primera elección");
                         coordenadas[0]=leerN.nextInt()-1;
-                        System.out.println("introduce la fila de tu primera elección");
+                        System.out.println("introduce la columna de tu primera elección");
                         coordenadas[1]=leerN.nextInt()-1;
-                        System.out.println("introduce la fila de tu primera elección");
+                        System.out.println("introduce la fila de tu segunda elección");
                         coordenadas[2]=leerN.nextInt()-1;
-                        System.out.println("introduce la fila de tu primera elección");
+                        System.out.println("introduce la columna de tu segunda elección");
                         coordenadas[3]=leerN.nextInt()-1;
                         
-                        contJ=jugar(matriz,mjuego,coordenadas,contJ);
+                        contJ=jugar(matriz,mjuego,coordenadas,contJ,ajustes);
                         System.out.println("Llevas "+contJ[0]+" parejas encontradas.");
                         System.out.println("Te quedan "+contJ[1]+" intentos");
                         
