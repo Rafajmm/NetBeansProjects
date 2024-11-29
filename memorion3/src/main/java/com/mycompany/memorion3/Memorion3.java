@@ -259,13 +259,12 @@ public class Memorion3 {
                         }
                     }
                     
-                    opajus=false;
                     
-                    while(!opajus){
+                    while(opajus){
                         System.out.println("Ahora introduce el tiempo de visualizacion en segundos");
                         segundos=leerN.nextInt()*1000;
                         ajustes[2]=segundos;
-                        opajus=true;
+                        opajus=false;
                     }
                     
                     
