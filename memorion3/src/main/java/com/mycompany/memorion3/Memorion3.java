@@ -104,6 +104,20 @@ public class Memorion3 {
         }            
     }
     
+    public static int[] stringToInt(String casillas[]){
+        // transforma los string introducidos por teclado en enteros y lo guarda en un array
+        int[] coordenadas = new int[4];
+        
+        // Convertir los caracteres a enteros y asignarlos restando el caracter '0' para que cada número corresponda con su caracter
+        coordenadas[0] = casillas[0].charAt(0) - '0';  // Primera fila
+        coordenadas[1] = casillas[0].charAt(1) - '0';  // Primera columna
+        coordenadas[2] = casillas[1].charAt(0) - '0';  // Segunda fila 
+        coordenadas[3] = casillas[1].charAt(1) - '0';  // Segunda columna
+        
+        return coordenadas;
+    }
+
+    
     public static boolean condiciones(char mjuego[][],int coordenadas[]){
         int posminima=0, fila=coordenadas[0],fila2=coordenadas[2],columna=coordenadas[1],columna2=coordenadas[3];
         boolean condicion=true;
@@ -129,6 +143,10 @@ public class Memorion3 {
     
     
     public static int[] jugar(char matriz[][],char mjuego[][],int coordenadas[],int[] contJ,int ajustes[]){
+        //esta función comprueba que las casillas elegidas cumplen las condiciones antes de modificar la matriz mjuego 
+        //luego copia en mjuego el contenido de las casillas elegidas por el usuario, si el contenido es distinto vuelve a dejar
+        //mjuego como estaba antes.
+        
         int fila=coordenadas[0],fila2=coordenadas[2],columna=coordenadas[1],columna2=coordenadas[3]; 
 
         if(condiciones(mjuego,coordenadas)){
@@ -145,7 +163,7 @@ public class Memorion3 {
             }
             
             
-            limpiarPantalla();
+            limpiarPantalla(); //limpia pantalla pero sólo funciona en cmd de windows y la terminal de linux
             
             
             if(matriz[fila][columna]!=matriz[fila2][columna2]){
@@ -163,7 +181,7 @@ public class Memorion3 {
     }
     
     public static void imprimirJugar(char mjuego[][]){
-    //Imprime la matriz
+    //Imprime la matriz cada turno
         
         for(int i=0;i<mjuego[0].length;i++){
             System.out.print("     "+(i+1)+"    ");
@@ -215,14 +233,27 @@ public class Memorion3 {
             e.printStackTrace();
         }
     }
-
+    
+    public static String tiempoLegible(long tiempoMili) {
+        long segundosTotales = tiempoMili / 1000;
+        
+        long horas = segundosTotales / 3600;
+        
+        long minutos = (segundosTotales % 3600) / 60;
+        
+        long segundos = segundosTotales % 60;
+        
+        return "Tiempo total: "+horas+" horas "+minutos+" minutos "+segundos+" segundos";
+       
+    }
 
     
     public static void main(String[] args) {
         boolean salir=false,opajus;
         char opcion;
         char matriz[][];
-        int ajustes[]={3,4,5000};
+        long tablaPuntos[]=new long[0],puntos;
+        int ajustes[]={3,4,3000};
         int fila=3,columna=4,segundos; //Dimensiones predeterminadas
         Scanner leerC=new Scanner(System.in);
         Scanner leerN=new Scanner(System.in);
@@ -275,12 +306,15 @@ public class Memorion3 {
                     char mjuego[][]=generarMatriz(ajustes);
                     char simbolos[]=simbolos(ajustes);
                     boolean terminar=false;
+                    long tiempoInicial,tiempoFinal;
                     int pareja=(ajustes[0]*ajustes[1])/2;
                     int efila1,ecolumna1,efila2,ecolumna2,contJ[]={0,(pareja+(pareja/2))},coordenadas[]=new int[4];
                     matriz=rellenarMatriz(generarMatriz(ajustes),simbolos);
                     comprobarContenido(matriz);
                     
                     System.out.println("Comienza el juego. Tienes "+contJ[1]+" intentos.");
+                    
+                    tiempoInicial=System.currentTimeMillis();
                     
                     while(!terminar){
                         
@@ -298,15 +332,33 @@ public class Memorion3 {
                         System.out.println("Llevas "+contJ[0]+" parejas encontradas.");
                         System.out.println("Te quedan "+contJ[1]+" intentos");
                         
+                        tiempoFinal=System.currentTimeMillis();
+                        puntos=tiempoFinal-tiempoInicial;    
+                        
                         if(contJ[0]==pareja){
-                            System.out.println("¡Has ganado!");
+                            System.out.println("¡Has ganado!");                            
+                            System.out.println(tiempoLegible(puntos));
+                            System.out.println("Tu puntuación es: "+puntos);
+                            
+                            tablaPuntos=Arrays.copyOf(tablaPuntos, tablaPuntos.length+1); //copiar tabla de puntos aumentando tamaño 
+                            tablaPuntos[tablaPuntos.length-1]=puntos;                     //guardar puntuación en el último espacio
+                            Arrays.sort(tablaPuntos);                                     //ordenar  
+                                                        
                             terminar=true;
                         }
                         if(contJ[1]==0){
                             System.out.println("¡Has perdido!");
+                            System.out.println(tiempoLegible(puntos));
+                            
                             terminar=true;
                         }
                     }
+                    
+                    
+                    System.out.println("Las mejores puntuaciones son"+Arrays.toString(tablaPuntos));
+                                    
+                    
+                    
                     
                     
                 break;
