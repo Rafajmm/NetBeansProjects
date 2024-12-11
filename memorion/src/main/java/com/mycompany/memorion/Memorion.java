@@ -109,10 +109,10 @@ public class Memorion {
         int[] coordenadas = new int[4];
        
         // Convertir los caracteres a enteros y asignarlos restando el caracter '0' para que cada número corresponda con su caracter
-        coordenadas[0] = casillas[0].charAt(0) - '0';  // Primera fila
-        coordenadas[1] = casillas[0].charAt(1) - '0';  // Primera columna
-        coordenadas[2] = casillas[1].charAt(0) - '0';  // Segunda fila
-        coordenadas[3] = casillas[1].charAt(1) - '0';  // Segunda columna
+        coordenadas[0]=(casillas[0].charAt(0)-'0')-1;  
+        coordenadas[1]=(casillas[0].charAt(1)-'0')-1;  
+        coordenadas[2]=(casillas[1].charAt(0)-'0')-1;  
+        coordenadas[3]=(casillas[1].charAt(1)-'0')-1;  
        
         return coordenadas;
     }
@@ -142,12 +142,12 @@ public class Memorion {
    
    
    
-    public static int[] jugar(char matriz[][],char mjuego[][],int coordenadas[],int ajustes[]){
+    public static void jugar(char matriz[][],char mjuego[][],int coordenadas[],int ajustes[]){
         //esta función comprueba que las casillas elegidas cumplen las condiciones antes de modificar la matriz mjuego
         //luego copia en mjuego el contenido de las casillas elegidas por el usuario, si el contenido es distinto vuelve a dejar
         //mjuego como estaba antes.
        
-        int fila=coordenadas[0],fila2=coordenadas[2],columna=coordenadas[1],columna2=coordenadas[3],contJ[]={ajustes[3],ajustes[4]};
+        int fila=coordenadas[0],fila2=coordenadas[2],columna=coordenadas[1],columna2=coordenadas[3];
 
         if(condiciones(mjuego,coordenadas)){
             mjuego[fila][columna]=matriz[fila][columna];
@@ -169,65 +169,55 @@ public class Memorion {
             if(matriz[fila][columna]!=matriz[fila2][columna2]){
                 mjuego[fila][columna]=' ';
                 mjuego[fila2][columna2]=' ';
-                contJ[4]--;
+                ajustes[4]--;
             }
            
             else{
-                contJ[3]++;
+                ajustes[3]++;
             }
         }
            
-        return contJ;
+        
     }
    
-    public static boolean ejecutarSolo(char matriz[][],int ajustes[]){
+    public static long ejecutarSolo(char matriz[][],int ajustes[]){
         Scanner leerN=new Scanner(System.in);
         boolean terminar=false;
-        int coordenadas[]=new int[4];
+        long tiempoFinal=0;
+        String coordenadas[]=new String[2];
+        int casillas[]=new int[4];
         int pareja=(ajustes[0]*ajustes[1])/2;
-        long tiempoInicial=0,tiempoFinal=0;
         char mjuego[][]=generarMatriz(ajustes);
-               
-        imprimirJugar(mjuego);
-        System.out.println("introduce la fila de tu primera elección");
-        coordenadas[0]=leerN.nextInt()-1;
-        System.out.println("introduce la columna de tu primera elección");
-        coordenadas[1]=leerN.nextInt()-1;
-        System.out.println("introduce la fila de tu segunda elección");
-        coordenadas[2]=leerN.nextInt()-1;
-        System.out.println("introduce la columna de tu segunda elección");
-        coordenadas[3]=leerN.nextInt()-1;
-
-        contJ=jugar(matriz,mjuego,coordenadas,contJ,ajustes);
-        System.out.println("Llevas "+contJ[0]+" parejas encontradas.");
-        System.out.println("Te quedan "+contJ[1]+" intentos");
-                       
-                           
-                       
-        if(contJ[0]==pareja){
-
-            tiempoFinal=System.currentTimeMillis();
-            puntos=tiempoFinal-tiempoInicial;
-            System.out.println("¡Has ganado!");                            
-            System.out.println(tiempoLegible(puntos));
-            System.out.println("Tu puntuación es: "+puntos);
-
-            tablaPuntos=Arrays.copyOf(tablaPuntos, tablaPuntos.length+1); //copiar tabla de puntos aumentando tamaño
-            tablaPuntos[tablaPuntos.length-1]=puntos;                     //guardar puntuación en el último espacio
-            Arrays.sort(tablaPuntos);                                     //ordenar  
-
-            terminar=true;
-        }
-        if(contJ[1]==0){
-            System.out.println("¡Has perdido!");
-
-
-            terminar=true;
-        }
                    
-        System.out.println("Las mejores puntuaciones son"+Arrays.toString(tablaPuntos));
-       
-        return terminar;
+        while(!terminar){
+
+            imprimirJugar(mjuego);
+            System.out.println("introduce la primera casilla");
+            coordenadas[0]=leerN.next();
+            System.out.println("introduce la segunda casilla");
+            coordenadas[1]=leerN.next();
+                        
+            casillas=stringToInt(coordenadas);
+            jugar(matriz,mjuego,casillas,ajustes);
+            
+            if(ajustes[3]==pareja-1){
+                tiempoFinal=System.currentTimeMillis();
+                System.out.println("¡Has ganado!");
+                
+                terminar=true;
+            }
+            
+            else if(ajustes[4]==0){
+                System.out.println("¡Has perdido!");
+                terminar=true;
+            }
+            else{
+                System.out.println("Llevas "+ajustes[3]+" parejas encontradas.");
+                System.out.println("Te quedan "+ajustes[4]+" intentos");
+            }
+        }
+        
+        return tiempoFinal;
     }
    
     public static void imprimirJugar(char mjuego[][]){
@@ -274,7 +264,7 @@ public class Memorion {
             }
 
             // Inicia el proceso
-            processBuilder.inheritIO().start();
+            processBuilder.inheritIO().start().waitFor();
 
         }
        
@@ -360,6 +350,7 @@ public class Memorion {
                         System.out.println("Introduce el numero de fallos (el máximo dependerá del tamaño de la tabla");
                         System.out.println("y no puede superar el numero de parejas mas su mitad)");
                         ajustes[4]=leerN.nextInt();
+                        ajustes[3]=0;
                        
                         if(ajustes[4]<0 || ajustes[4]>fallos){
                             System.out.println("Fallos fuera de rango");
@@ -374,65 +365,39 @@ public class Memorion {
                 break;
                
                 case 'e':
-                    char mjuego[][]=generarMatriz(ajustes);
                     char simbolos[]=simbolos(ajustes);
-                    boolean terminar=false;
                     long tiempoInicial=0,tiempoFinal=0;
-                    int pareja=(ajustes[0]*ajustes[1])/2;
-                    int efila1,ecolumna1,efila2,ecolumna2,contJ[]={0,(pareja+(pareja/2))},coordenadas[]=new int[4];
+                    
+                    puntos=0;
                     matriz=rellenarMatriz(generarMatriz(ajustes),simbolos);
                     comprobarContenido(matriz);
-                   
-                    System.out.println("Comienza el juego. Tienes "+contJ[1]+" intentos.");
+                                       
+                    System.out.println("Comienza el juego. Tienes "+ajustes[4]+" intentos.");
                    
                     tiempoInicial=System.currentTimeMillis();
-                   
-                    while(!terminar){
-                       
-                        imprimirJugar(mjuego);
-                        System.out.println("introduce la fila de tu primera elección");
-                        coordenadas[0]=leerN.nextInt()-1;
-                        System.out.println("introduce la columna de tu primera elección");
-                        coordenadas[1]=leerN.nextInt()-1;
-                        System.out.println("introduce la fila de tu segunda elección");
-                        coordenadas[2]=leerN.nextInt()-1;
-                        System.out.println("introduce la columna de tu segunda elección");
-                        coordenadas[3]=leerN.nextInt()-1;
-                       
-                        contJ=jugar(matriz,mjuego,coordenadas,contJ,ajustes);
-                        System.out.println("Llevas "+contJ[0]+" parejas encontradas.");
-                        System.out.println("Te quedan "+contJ[1]+" intentos");
-                       
-                           
-                       
-                        if(contJ[0]==pareja){
-                           
-                            tiempoFinal=System.currentTimeMillis();
-                            puntos=tiempoFinal-tiempoInicial;
-                            System.out.println("¡Has ganado!");                            
-                            System.out.println(tiempoLegible(puntos));
-                            System.out.println("Tu puntuación es: "+puntos);
-                           
-                            tablaPuntos=Arrays.copyOf(tablaPuntos, tablaPuntos.length+1); //copiar tabla de puntos aumentando tamaño
-                            tablaPuntos[tablaPuntos.length-1]=puntos;                     //guardar puntuación en el último espacio
-                            Arrays.sort(tablaPuntos);                                     //ordenar  
-                                                       
-                            terminar=true;
-                        }
-                        if(contJ[1]==0){
-                            System.out.println("¡Has perdido!");
-                           
-                           
-                            terminar=true;
-                        }
+                    
+                    tiempoFinal=ejecutarSolo(matriz,ajustes);
+                    
+                    if(tiempoFinal>0){
+                        ajustes[3]=0;
+                        parejas=(ajustes[0]*ajustes[1])/2;
+                        fallos=parejas+(parejas/2);
+                        ajustes[4]=fallos;
+                        puntos=tiempoFinal-tiempoInicial;
+                        System.out.println(tiempoLegible(puntos));
+                        tablaPuntos=Arrays.copyOf(tablaPuntos, tablaPuntos.length+1); //copiar tabla de puntos aumentando tamaño 
+                        tablaPuntos[tablaPuntos.length-1]=puntos;                     //guardar puntuación en el último espacio
+                        Arrays.sort(tablaPuntos); 
+                    }
+                    
+                    else{
+                        ajustes[3]=0;
+                        parejas=(ajustes[0]*ajustes[1])/2;
+                        fallos=parejas+(parejas/2);
+                        ajustes[4]=fallos;
                     }
                    
-                   
-                    System.out.println("Las mejores puntuaciones son"+Arrays.toString(tablaPuntos));
-                                   
-                   
-                   
-                   
+                    System.out.println("Las mejores puntuaciones son"+Arrays.toString(tablaPuntos));                                                                                            
                    
                 break;
                
