@@ -192,17 +192,29 @@ public class Memorion {
         while(!terminar){
 
             imprimirJugar(mjuego);
-            System.out.println("introduce la primera casilla");
-            coordenadas[0]=leerN.next();
-            System.out.println("introduce la segunda casilla");
-            coordenadas[1]=leerN.next();
-                        
+            boolean terminar2=false;
+            while(!terminar2){
+                System.out.println("introduce la primera casilla");
+                coordenadas[0]=leerN.next();
+                System.out.println("introduce la segunda casilla");
+                coordenadas[1]=leerN.next();
+                
+                if(coordenadas[0].length()<2 || coordenadas[0].length()>2 || coordenadas[1].length()<2 || coordenadas[1].length()>2){
+                    System.out.println("Has introducido un formato no válido.");
+                    System.out.println("Cada casilla la tienes que introducir");
+                    System.out.println("indicando la fila y la columna correspondientes");
+                }
+                else{
+                    terminar2=true;
+                }
+            }            
             casillas=stringToInt(coordenadas);
             jugar(matriz,mjuego,casillas,ajustes);
             
             if(ajustes[3]==pareja-1){
                 tiempoFinal=System.currentTimeMillis();
                 System.out.println("¡Has ganado!");
+                comprobarContenido(matriz);
                 
                 terminar=true;
             }
@@ -282,17 +294,21 @@ public class Memorion {
        
         long segundos = segundosTotales % 60;
        
-        return "Tiempo total: "+horas+" horas "+minutos+" minutos "+segundos+" segundos";
-       
+        return "Tiempo total: "+horas+" horas "+minutos+" minutos "+segundos+" segundos";       
     }
 
+//    public static int stringAInt(String lectura){
+//        int numero;
+//        numero=lectura.charAt(0)-'0';
+//        return numero;
+//    }
    
     public static void main(String[] args) {
         boolean salir=false,opajus;
         char opcion;
         char matriz[][];
         long tablaPuntos[]=new long[0],puntos;
-        int ajustes[]={3,4,3000,0,9};
+        int ajustes[]={3,4,3000,0,9,1};
         int fallos=0,parejas=0;
         int fila,columna,segundos; //Dimensiones predeterminadas
         Scanner leerC=new Scanner(System.in);
@@ -331,9 +347,9 @@ public class Memorion {
                     }
                                        
                     while(opajus){
-                        System.out.println("Ahora introduce el tiempo de visualizacion en segundos (entre 1 y 10)");
+                        System.out.println("Ahora introduce el tiempo de visualizacion en segundos (entre 1 y 5)");
                         segundos=leerN.nextInt();
-                        if(segundos>0 && segundos<11){
+                        if(segundos>0 && segundos<6){
                             ajustes[2]=(segundos*1000);
                             opajus=false;
                         }
@@ -348,18 +364,28 @@ public class Memorion {
                         fallos=parejas+(parejas/2);
                        
                         System.out.println("Introduce el numero de fallos (el máximo dependerá del tamaño de la tabla");
-                        System.out.println("y no puede superar el numero de parejas mas su mitad)");
+                        System.out.println("y no puede superar el numero de parejas mas su mitad, en este caso: "+fallos+")");
                         ajustes[4]=leerN.nextInt();
                         ajustes[3]=0;
                        
-                        if(ajustes[4]<0 || ajustes[4]>fallos){
+                        if(ajustes[4]<=0 || ajustes[4]>fallos){
                             System.out.println("Fallos fuera de rango");
                         }
                         else{
                             opajus=true;
-                        }
+                        }                    
                     }
-                   
+                    
+                    while(opajus){
+                        System.out.println("Por ultimo elige el zoom: 1, 2 ó 3");
+                        ajustes[5]=leerN.nextInt();
+                        if(ajustes[5]!=1 && ajustes[5]!=2 && ajustes[5]!=3){
+                            System.out.println("No has introducida una opción válida");
+                        }
+                        else{ 
+                            opajus=false; 
+                        }   
+                    }
                    
                    
                 break;
@@ -370,7 +396,7 @@ public class Memorion {
                     
                     puntos=0;
                     matriz=rellenarMatriz(generarMatriz(ajustes),simbolos);
-                    comprobarContenido(matriz);
+                    //comprobarContenido(matriz); 
                                        
                     System.out.println("Comienza el juego. Tienes "+ajustes[4]+" intentos.");
                    
