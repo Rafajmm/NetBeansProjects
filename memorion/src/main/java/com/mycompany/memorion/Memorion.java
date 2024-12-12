@@ -110,8 +110,8 @@ public class Memorion {
         String casilla2[]=casillas[1].split("-");
         int coordenadas[]=new int[4];
         
-        // Convertir los caracteres a enteros y asignarlos restando el caracter '0' para que cada número corresponda con su caracter
-        coordenadas[0]=(Integer.parseInt(casilla1[0]))-1;  
+        // Convertir los string a enteros usando el metodo .parseInt()
+        coordenadas[0]=(Integer.parseInt(casilla1[0]))-1;  //restamos 1 para que esté dentro de rango
         coordenadas[1]=(Integer.parseInt(casilla1[1]))-1;  
         coordenadas[2]=(Integer.parseInt(casilla2[0]))-1;  
         coordenadas[3]=(Integer.parseInt(casilla2[1]))-1;  
@@ -158,7 +158,7 @@ public class Memorion {
             imprimirJugar(mjuego,ajustes[5]);
            
             try {
-            //pausa de 5 segundos antes de limpiar la pantalla
+            //pausa de x segundos antes de limpiar la pantalla
                 Thread.sleep(ajustes[2]);  
             }
             catch (InterruptedException e) {
@@ -184,13 +184,37 @@ public class Memorion {
     }
     
     public static boolean comprobarDigitos(String casillas[]){
-        boolean cond=false;
-        
-        String casilla1[]=casillas[0].split("-");
-        String casilla2[]=casillas[1].split("-");
-        
-        
-        
+        boolean cond = true; 
+
+        // Necesitamos un bucle anidado para dividir las dos casillas en sus filas y columnas correspondientes
+        for (int i=0;i<casillas.length;i++) {
+            
+            String casilla[]=casillas[i].split("-");
+            if(casilla.length<2){  //Si el array creado a partir del string dentro de casillas tiene un tamaño menor que dos para la ejecucion
+                cond=false;
+                break;
+            }
+            
+            for (int z=0;z<casilla.length;z++) {
+                
+                if (casilla[z]==null || casilla[z].isEmpty()) { // Si alguna fila o columna está vacía
+                    cond = false;
+                    break;
+                    
+                } 
+                                
+                try {
+                    Integer.parseInt(casilla[z]); // Intentamos convertir el string a un entero
+                } 
+                catch (NumberFormatException e) {
+                    cond = false; // Si falla, no es un número
+                    break;
+                }
+                
+            }
+            if (!cond) break; // Salimos si ya se encontró un valor no numérico
+        }
+
         return cond;
     }
    
@@ -209,23 +233,28 @@ public class Memorion {
             boolean terminar2=false;
             
             while(!terminar2){
+                System.out.println();
                 System.out.println("introduce la primera casilla con el formato x-y");
                 coordenadas[0]=leerN.next();
                 System.out.println("introduce la segunda casilla con el formato x-y");
                 coordenadas[1]=leerN.next();
                 
-                if(coordenadas[0].length()<3 || coordenadas[0].length()>5 || coordenadas[1].length()<3 || coordenadas[1].length()>5){
+                if(!comprobarDigitos(coordenadas)){
+                    System.out.println("Has introducido alguna letra o símbolo");
+                }
+                
+                else if(coordenadas[0].length()<3 || coordenadas[0].length()>5 || coordenadas[1].length()<3 || coordenadas[1].length()>5){
                     System.out.println("Has introducido un formato no válido.");
-                    System.out.println("Cada casilla la tienes que introducir");
-                    System.out.println("indicando la fila y la columna de la forma x-y");
                 }
                 
                 else if((coordenadas[0].indexOf('-')!=1 && coordenadas[0].indexOf('-')!=2) || (coordenadas[1].indexOf('-')!=1 && coordenadas[1].indexOf('-')!=2)){
                     System.out.println("Has introducido un formato no válido.");
-                    System.out.println("Cada casilla la tienes que introducir");
-                    System.out.println("indicando la fila y la columna de la forma x-y");
                 }
                 
+                else if((coordenadas[0].length()==3 && coordenadas[0].indexOf('-')!=1) || (coordenadas[1].length()==3 && coordenadas[1].indexOf('-')!=1)){
+                    
+                }
+                                                 
                 else{
                     terminar2=true;
                 }
@@ -244,6 +273,7 @@ public class Memorion {
             
             else if(ajustes[4]==0){
                 System.out.println("¡Has perdido!");
+                
                 terminar=true;
             }
             else{
@@ -319,12 +349,6 @@ public class Memorion {
        
         return "Tiempo total: "+horas+" horas "+minutos+" minutos "+segundos+" segundos";       
     }
-
-//    public static int stringAInt(String lectura){
-//        int numero;
-//        numero=lectura.charAt(0)-'0';
-//        return numero;
-//    }
    
     public static void main(String[] args) {
         boolean salir=false,opajus;
