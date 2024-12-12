@@ -106,13 +106,15 @@ public class Memorion {
    
     public static int[] stringToInt(String casillas[]){
         // transforma los string introducidos por teclado en enteros y lo guarda en un array
-        int[] coordenadas = new int[4];
-       
+        String casilla1[]=casillas[0].split("-");
+        String casilla2[]=casillas[1].split("-");
+        int coordenadas[]=new int[4];
+        
         // Convertir los caracteres a enteros y asignarlos restando el caracter '0' para que cada número corresponda con su caracter
-        coordenadas[0]=(casillas[0].charAt(0)-'0')-1;  
-        coordenadas[1]=(casillas[0].charAt(1)-'0')-1;  
-        coordenadas[2]=(casillas[1].charAt(0)-'0')-1;  
-        coordenadas[3]=(casillas[1].charAt(1)-'0')-1;  
+        coordenadas[0]=(Integer.parseInt(casilla1[0]))-1;  
+        coordenadas[1]=(Integer.parseInt(casilla1[1]))-1;  
+        coordenadas[2]=(Integer.parseInt(casilla2[0]))-1;  
+        coordenadas[3]=(Integer.parseInt(casilla2[1]))-1;  
        
         return coordenadas;
     }
@@ -149,10 +151,11 @@ public class Memorion {
        
         int fila=coordenadas[0],fila2=coordenadas[2],columna=coordenadas[1],columna2=coordenadas[3];
 
+        
         if(condiciones(mjuego,coordenadas)){
             mjuego[fila][columna]=matriz[fila][columna];
             mjuego[fila2][columna2]=matriz[fila2][columna2];
-            imprimirJugar(mjuego);
+            imprimirJugar(mjuego,ajustes[5]);
            
             try {
             //pausa de 5 segundos antes de limpiar la pantalla
@@ -179,6 +182,17 @@ public class Memorion {
            
         
     }
+    
+    public static boolean comprobarDigitos(String casillas[]){
+        boolean cond=false;
+        
+        String casilla1[]=casillas[0].split("-");
+        String casilla2[]=casillas[1].split("-");
+        
+        
+        
+        return cond;
+    }
    
     public static long ejecutarSolo(char matriz[][],int ajustes[]){
         Scanner leerN=new Scanner(System.in);
@@ -191,23 +205,32 @@ public class Memorion {
                    
         while(!terminar){
 
-            imprimirJugar(mjuego);
+            imprimirJugar(mjuego,ajustes[5]);
             boolean terminar2=false;
+            
             while(!terminar2){
-                System.out.println("introduce la primera casilla");
+                System.out.println("introduce la primera casilla con el formato x-y");
                 coordenadas[0]=leerN.next();
-                System.out.println("introduce la segunda casilla");
+                System.out.println("introduce la segunda casilla con el formato x-y");
                 coordenadas[1]=leerN.next();
                 
-                if(coordenadas[0].length()<2 || coordenadas[0].length()>2 || coordenadas[1].length()<2 || coordenadas[1].length()>2){
+                if(coordenadas[0].length()<3 || coordenadas[0].length()>5 || coordenadas[1].length()<3 || coordenadas[1].length()>5){
                     System.out.println("Has introducido un formato no válido.");
                     System.out.println("Cada casilla la tienes que introducir");
-                    System.out.println("indicando la fila y la columna correspondientes");
+                    System.out.println("indicando la fila y la columna de la forma x-y");
                 }
+                
+                else if((coordenadas[0].indexOf('-')!=1 && coordenadas[0].indexOf('-')!=2) || (coordenadas[1].indexOf('-')!=1 && coordenadas[1].indexOf('-')!=2)){
+                    System.out.println("Has introducido un formato no válido.");
+                    System.out.println("Cada casilla la tienes que introducir");
+                    System.out.println("indicando la fila y la columna de la forma x-y");
+                }
+                
                 else{
                     terminar2=true;
                 }
-            }            
+            }   
+            
             casillas=stringToInt(coordenadas);
             jugar(matriz,mjuego,casillas,ajustes);
             
@@ -232,7 +255,7 @@ public class Memorion {
         return tiempoFinal;
     }
    
-    public static void imprimirJugar(char mjuego[][]){
+    public static void imprimirJugar(char mjuego[][], int zoom){
     //Imprime la matriz cada turno
        
         for(int i=0;i<mjuego[0].length;i++){
