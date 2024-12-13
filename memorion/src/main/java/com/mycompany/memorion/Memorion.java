@@ -286,59 +286,64 @@ public class Memorion {
     public static void imprimirJugar(char mjuego[][], int zoom){
     //Imprime la matriz cada turno
        
-        int filas = mjuego.length;
-        int columnas = mjuego[0].length;
+        int filas=mjuego.length;
+        int columnas=mjuego[0].length;
 
-        // Línea superior con numeración de columnas
-        System.out.print("    "); // Espacio para alinear las filas
-        for (int i = 0; i < columnas; i++) {
-            //System.out.print(" ");
+        //Bucle para indicar las columnas
+        System.out.print("    "); //Espacio para alinear la primera línea
+        for(int i=0;i<columnas;i++){
             for(int z=0;z<zoom;z++){
-            System.out.print(" " + (i+1) + " "); // Imprime el número de cada columna
+                System.out.print(" "+(i+1)+" "); //Imprime el número de cada columna
             }
-            if (i < columnas - 1) {
-            System.out.print("│"); // Separador de columnas
+            
+            if(i<columnas-1){
+                System.out.print("│"); //Separa los números
             }
         }
-        System.out.println();
+        
+        System.out.println(); //Salto de línea para comenzar a imprimir la tabla
 
         // Línea superior de la tabla
         System.out.print("   ┌");
-        for (int i = 0; i < columnas; i++) {
-            for (int z = 0; z < zoom; z++) {  // Asegura que cada celda sea de tamaño zoom
+        
+        for(int i=0;i<columnas;i++){
+            for(int z=0;z<zoom;z++){  
                 System.out.print("───");
             }
-            if (i < columnas - 1) {
+            
+            if(i<columnas-1){
                 System.out.print("┬");
             }
         }
+        
         System.out.println("┐");
 
-        // Filas de la tabla
-        for (int i = 0; i < filas; i++) {
-            // Repetir las filas según el zoom
-            for (int z = 0; z < zoom; z++) {
-                // Numeración de las filas al inicio
-                System.out.print(" " + i + " │");
-                // Imprimir el contenido de la tabla con el zoom aplicado
-                for (int j = 0; j < columnas; j++) {
-                    // Repetir el contenido de la celda según el zoom
-                    for (int z2 = 0; z2 < zoom; z2++) {
-                        System.out.print(" " + mjuego[i][j] + " ");  // Repetir el contenido de la celda
+        // Filas de la tabla con contenido
+        for(int i=0;i<filas;i++){            
+            for(int z=0;z<zoom;z++){  //Repite las filas según el zoom
+                
+                System.out.print(" " + i + " │");  //Imprime el número de cada fila
+                
+                // Imprime el contenido de la tabla
+                for(int j=0;j<columnas;j++){
+                    for(int z2=0;z2<zoom;z2++){  //Repetir el contenido de la celda según el zoom                        
+                        System.out.print(" " + mjuego[i][j] + " ");  
                     }
-                    System.out.print("│");
+                    
+                    System.out.print("│");  //Separador de columnas
                 }
+                
                 System.out.println();
             }
 
-            // Línea intermedia o inferior entre las filas
-            if (i < filas - 1) {
+            // Línea entre las filas
+            if(i<filas-1){
                 System.out.print("   ├");
-                for (int j = 0; j < columnas; j++) {
-                    for (int z = 0; z < zoom; z++) {  // Asegura que cada celda tenga el tamaño correcto
+                for(int j=0;j<columnas;j++){
+                    for(int z=0;z<zoom;z++){  //Bucle para ajustar el tamaño de la celda
                         System.out.print("───");
                     }
-                    if (j < columnas - 1) {
+                    if(j<columnas-1){
                         System.out.print("┼");
                     }
                 }
@@ -348,27 +353,28 @@ public class Memorion {
 
         // Línea inferior de la tabla
         System.out.print("   └");
-        for (int i = 0; i < columnas; i++) {
-            for (int z = 0; z < zoom; z++) {  // Asegura que cada celda tenga el tamaño correcto
+        for(int i=0;i<columnas;i++){
+            for(int z=0;z<zoom;z++){  //Bucle para ajustar el tamaño de la celda
                 System.out.print("───");
             }
-            if (i < columnas - 1) {
+            if(i<columnas-1){
                 System.out.print("┴");
             }
         }
         System.out.println("┘"); 
     }
    
-    public static void limpiarPantalla() {
+    public static void limpiarPantalla(){
        
-        try {
+        try{
             final String os = System.getProperty("os.name");
 
             ProcessBuilder processBuilder;
-            if (os.contains("Windows")) {
+            if(os.contains("Windows")){
                 // En Windows, ejecutamos el comando 'cls'
                 processBuilder = new ProcessBuilder("cmd", "/c", "cls");
-            } else {
+            } 
+            else{
                 // En sistemas Unix (Linux, macOS), ejecutamos 'clear'
                 processBuilder = new ProcessBuilder("clear");
             }
@@ -378,19 +384,19 @@ public class Memorion {
 
         }
        
-        catch (final Exception e) {
+        catch(final Exception e){
             e.printStackTrace();
         }
     }
    
-    public static String tiempoLegible(long tiempoMili) {
-        long segundosTotales = tiempoMili / 1000;
+    public static String tiempoLegible(long tiempoMili){
+        long segundosTotales=tiempoMili/1000;
        
-        long horas = segundosTotales / 3600;
+        long horas=segundosTotales/3600;
        
-        long minutos = (segundosTotales % 3600) / 60;
+        long minutos=(segundosTotales % 3600)/60;
        
-        long segundos = segundosTotales % 60;
+        long segundos=segundosTotales%60;
        
         return "Tiempo total: "+horas+" horas "+minutos+" minutos "+segundos+" segundos";       
     }
