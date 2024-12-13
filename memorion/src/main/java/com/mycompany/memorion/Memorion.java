@@ -191,28 +191,26 @@ public class Memorion {
             
             String casilla[]=casillas[i].split("-");
             if(casilla.length<2){  //Si el array creado a partir del string dentro de casillas tiene un tamaño menor que dos para la ejecucion
-                cond=false;
-                break;
+                cond=false;                
             }
             
             for (int z=0;z<casilla.length;z++) {
                 
                 if (casilla[z]==null || casilla[z].isEmpty()) { // Si alguna fila o columna está vacía
-                    cond = false;
-                    break;
-                    
+                    cond = false;                                        
                 } 
                                 
                 try {
                     Integer.parseInt(casilla[z]); // Intentamos convertir el string a un entero
                 } 
                 catch (NumberFormatException e) {
-                    cond = false; // Si falla, no es un número
-                    break;
+                    cond = false; // Si falla, no es un número                    
                 }
                 
             }
-            if (!cond) break; // Salimos si ya se encontró un valor no numérico
+            if(!cond){ 
+                break;
+            } // Salimos si ya se encontró un valor no numérico
         }
 
         return cond;
@@ -294,24 +292,34 @@ public class Memorion {
         System.out.println();
        
         for (int i=0;i<mjuego[0].length;i++){
-            System.out.print("  --------");
+            for(int z=0;z<zoom;z++){
+            System.out.print("-------");
+            }
         }
         System.out.println();
        
        
         for(int i=0;i<mjuego.length;i++){
-            System.out.print((i+1)+"|");
-            for(int j=0;j<mjuego[0].length;j++){
-               
-                System.out.print("    "+mjuego[i][j]+"    |");                
+            for(int k=0;k<zoom;k++){
+                System.out.print((i+1)+"|");
+                for(int j=0;j<mjuego[0].length;j++){
+                    for(int z=0;z<zoom;z++){
+                    System.out.print("   "+mjuego[i][j]+"  ");                
+                    }
+                    System.out.print("|");
+                    
+                }
+                System.out.println();
             }    
            
             System.out.println();
             for (int k=0;k<mjuego[0].length;k++){
-                System.out.print("  --------");
+                for(int z=0;z<zoom;z++){
+                    System.out.print("-------");
+                }
             }
             System.out.println();
-        }      
+        } 
     }
    
     public static void limpiarPantalla() {
