@@ -286,40 +286,77 @@ public class Memorion {
     public static void imprimirJugar(char mjuego[][], int zoom){
     //Imprime la matriz cada turno
        
-        for(int i=0;i<mjuego[0].length;i++){
-            System.out.print("     "+(i+1)+"    ");
-        }
-        System.out.println();
-       
-        for (int i=0;i<mjuego[0].length;i++){
+        int filas = mjuego.length;
+        int columnas = mjuego[0].length;
+
+        // Línea superior con numeración de columnas
+        System.out.print("    "); // Espacio para alinear las filas
+        for (int i = 0; i < columnas; i++) {
+            //System.out.print(" ");
             for(int z=0;z<zoom;z++){
-            System.out.print("-------");
+            System.out.print(" " + (i+1) + " "); // Imprime el número de cada columna
+            }
+            if (i < columnas - 1) {
+            System.out.print("│"); // Separador de columnas
             }
         }
         System.out.println();
-       
-       
-        for(int i=0;i<mjuego.length;i++){
-            for(int k=0;k<zoom;k++){
-                System.out.print((i+1)+"|");
-                for(int j=0;j<mjuego[0].length;j++){
-                    for(int z=0;z<zoom;z++){
-                    System.out.print("   "+mjuego[i][j]+"  ");                
+
+        // Línea superior de la tabla
+        System.out.print("   ┌");
+        for (int i = 0; i < columnas; i++) {
+            for (int z = 0; z < zoom; z++) {  // Asegura que cada celda sea de tamaño zoom
+                System.out.print("───");
+            }
+            if (i < columnas - 1) {
+                System.out.print("┬");
+            }
+        }
+        System.out.println("┐");
+
+        // Filas de la tabla
+        for (int i = 0; i < filas; i++) {
+            // Repetir las filas según el zoom
+            for (int z = 0; z < zoom; z++) {
+                // Numeración de las filas al inicio
+                System.out.print(" " + i + " │");
+                // Imprimir el contenido de la tabla con el zoom aplicado
+                for (int j = 0; j < columnas; j++) {
+                    // Repetir el contenido de la celda según el zoom
+                    for (int z2 = 0; z2 < zoom; z2++) {
+                        System.out.print(" " + mjuego[i][j] + " ");  // Repetir el contenido de la celda
                     }
-                    System.out.print("|");
-                    
+                    System.out.print("│");
                 }
                 System.out.println();
-            }    
-           
-            System.out.println();
-            for (int k=0;k<mjuego[0].length;k++){
-                for(int z=0;z<zoom;z++){
-                    System.out.print("-------");
-                }
             }
-            System.out.println();
-        } 
+
+            // Línea intermedia o inferior entre las filas
+            if (i < filas - 1) {
+                System.out.print("   ├");
+                for (int j = 0; j < columnas; j++) {
+                    for (int z = 0; z < zoom; z++) {  // Asegura que cada celda tenga el tamaño correcto
+                        System.out.print("───");
+                    }
+                    if (j < columnas - 1) {
+                        System.out.print("┼");
+                    }
+                }
+                System.out.println("┤");
+            }
+        }
+
+        // Línea inferior de la tabla
+        System.out.print("   └");
+        for (int i = 0; i < columnas; i++) {
+            for (int z = 0; z < zoom; z++) {  // Asegura que cada celda tenga el tamaño correcto
+                System.out.print("───");
+            }
+            if (i < columnas - 1) {
+                System.out.print("┴");
+            }
+        }
+        System.out.println("┘"); 
     }
    
     public static void limpiarPantalla() {
