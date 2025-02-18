@@ -8,12 +8,9 @@ public class Memorion {
        
         System.out.println("Pulsa 'a' para entrar a los ajustes");
        
-        System.out.println("Pulsa 'e' para jugar en solitario");
+        System.out.println("Pulsa 'e' para empezar el juego");
        
-        System.out.println("Pulsa 'm' para jugar contra la máquina");
-        
         System.out.println("Pulsa 's' para salir");
-                
     }
    
     public static char[][] generarMatriz(int ajustes[]){
@@ -253,7 +250,7 @@ public class Memorion {
                 }
                 
                 else if((coordenadas[0].length()==3 && coordenadas[0].indexOf('-')!=1) || (coordenadas[1].length()==3 && coordenadas[1].indexOf('-')!=1)){
-                    System.out.println("Hhas introducido un formato no válido");
+                    
                 }
                                                  
                 else{
@@ -325,7 +322,7 @@ public class Memorion {
         for(int i=0;i<filas;i++){            
             for(int z=0;z<zoom;z++){  //Repite las filas según el zoom
                 
-                System.out.print(" " +(i+1)+ " │");  //Imprime el número de cada fila
+                System.out.print(" " + i + " │");  //Imprime el número de cada fila
                 
                 // Imprime el contenido de la tabla
                 for(int j=0;j<columnas;j++){
@@ -397,158 +394,11 @@ public class Memorion {
        
         long horas=segundosTotales/3600;
        
-        long minutos=(segundosTotales%3600)/60;
+        long minutos=(segundosTotales % 3600)/60;
        
         long segundos=segundosTotales%60;
        
         return "Tiempo total: "+horas+" horas "+minutos+" minutos "+segundos+" segundos";       
-    }
-    
-    public static void maquinaFacil(char matriz[][], int ajustes[]){
-        
-        Scanner leerN=new Scanner(System.in);
-        boolean turnoJugador=true;
-        char mjuego[][]=generarMatriz(ajustes),mjuegoM[][]=generarMatriz(ajustes);
-        int jugador[]={ajustes[3],ajustes[4]};
-        int maquina[]={ajustes[3],ajustes[4]};
-        String coordenadas[]=new String[2];
-        int casillas[]=new int[4];
-        int pareja=(ajustes[0]*ajustes[1])/2,fallos=ajustes[4];
-    
-        
-        while((jugador[0]<pareja-1 && jugador[1]>0) && (maquina[0]<pareja-1 && maquina[1]>0)){            
-    
-            if(turnoJugador){
-                imprimirJugar(mjuego,ajustes[5]);
-
-                boolean terminar2=false;
-
-                while(!terminar2){
-                    System.out.println();
-                    System.out.println("Introduce la primera casilla con el formato x-y");
-                    coordenadas[0]=leerN.next();
-                    System.out.println("Introduce la segunda casilla con el formato x-y");
-                    coordenadas[1]=leerN.next();
-                    
-                    casillas=stringToInt(coordenadas);
-                    
-                    if(!comprobarDigitos(coordenadas)){
-                        System.out.println("Has introducido alguna letra o símbolo");
-                    }
-                    else if(coordenadas[0].length()<3 || coordenadas[0].length()>5 || coordenadas[1].length()<3 || coordenadas[1].length()>5){
-                    System.out.println("Has introducido un formato no válido.");
-                    }
-                
-                    else if((coordenadas[0].indexOf('-')!=1 && coordenadas[0].indexOf('-')!=2) || (coordenadas[1].indexOf('-')!=1 && coordenadas[1].indexOf('-')!=2)){
-                        System.out.println("Has introducido un formato no válido.");
-                    }
-                
-                    else if((coordenadas[0].length()==3 && coordenadas[0].indexOf('-')!=1) || (coordenadas[1].length()==3 && coordenadas[1].indexOf('-')!=1)){
-                        System.out.println("Formato no válido");                    
-                    }
-                    
-                    else if(casillas[0]<0 || casillas[2]<0 ||casillas[1]<0 || casillas[3]<0 || casillas[0]>=mjuego.length || casillas[2]>=mjuego.length || casillas[1]>=mjuego[0].length || casillas[3]>=mjuego[0].length){
-                        System.out.println("Has seleccionado alguna posición fuera de rango");
-                    }
-                    
-                    else if(mjuego[casillas[0]][casillas[1]]!=' ' || mjuego[casillas[2]][casillas[3]]!=' '){
-                        System.out.println("Has seleccionado una casilla que forma parte de una pareja descubierta");
-                    }
-                    
-                    else if(coordenadas[0].equals(coordenadas[1])==true){
-                        System.out.println("Has seleccionado dos veces la misma casilla");
-                    }                                        
-                                                 
-                    else{
-                        terminar2=true;
-                    }
-                }
-                
-                casillas=stringToInt(coordenadas);
-                jugar(matriz,mjuego,casillas,ajustes);
-                
-                jugador[0]+=ajustes[3];
-                jugador[1]-=(fallos-ajustes[4]);
-                ajustes[3]=0;
-                ajustes[4]=fallos;
-    
-                if(jugador[0]==pareja-1){
-                    System.out.println("¡Has ganado!");
-                    comprobarContenido(matriz);
-                    
-                    
-                } 
-                else if(jugador[1]==0){
-                    System.out.println("¡Has perdido!");
-                    
-                } 
-                else{
-                    System.out.println("Llevas "+jugador[0]+" parejas encontradas.");
-                    System.out.println("Te quedan "+jugador[1]+" intentos");
-                }
-                
-                try {
-                //pausa de 2 segundos para cambiar de turno
-                    Thread.sleep(2000);  
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();  
-                }
-            } 
-            
-            else {
-                imprimirJugar(mjuegoM,ajustes[5]);
-                // La máquina hace su jugada
-
-                System.out.println("Es el turno de la máquina.");
-                int fila, columna, fila2, columna2;
-
-                do {
-                    fila=(int)(Math.random()*matriz.length);
-                    columna=(int)(Math.random()*matriz[0].length);
-                    fila2=(int)(Math.random()*matriz.length);
-                    columna2=(int)(Math.random()*matriz[0].length);
-                } while(mjuegoM[fila][columna]!=' ' || mjuegoM[fila2][columna2]!=' ' || (fila==fila2 && columna==columna2));
-    
-                casillas[0]=fila;
-                casillas[1]=columna;
-                casillas[2]=fila2;
-                casillas[3]=columna2;
-
-                System.out.println("La máquina ha elegido: "+(fila+1)+"-"+(columna+1)+" y "+(fila2+1)+"-"+(columna2+1));
-                
-                jugar(matriz,mjuegoM,casillas,ajustes);
-                
-                maquina[0]+=ajustes[3];
-                maquina[1]-=(fallos-ajustes[4]);
-                ajustes[3]=0;
-                ajustes[4]=fallos;
-
-                if(maquina[0]==pareja-1){
-                    System.out.println("¡La máquina ha ganado!");
-                    comprobarContenido(matriz);                   
-                    
-                } 
-                else if(maquina[1]==0){
-                    System.out.println("¡La máquina ha perdido!");
-                    
-                } 
-                else{
-                    System.out.println("La máquina lleva "+maquina[0]+" parejas encontradas.");
-                    System.out.println("Le quedan "+maquina[1]+" intentos");
-                }
-                
-                try {
-                //pausa de 2 segundos para cambiar de turno
-                    Thread.sleep(2000);  
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();  
-                }
-            }
-    
-            turnoJugador=!turnoJugador; // Cambiar el turno entre el jugador y la máquina
-        }
     }
    
     public static void main(String[] args) {
@@ -566,7 +416,7 @@ public class Memorion {
             menu();
             opcion=leerC.next().charAt(0);
            
-            if(opcion!='a' && opcion!='e' && opcion!='s' && opcion!='m'){
+            if(opcion!='a' && opcion!='e' && opcion!='s'){
                 System.out.println("Opción no válida.");
             }
            
@@ -595,14 +445,14 @@ public class Memorion {
                     }
                                        
                     while(opajus){
-                        System.out.println("Ahora introduce el tiempo de visualización en segundos (entre 1 y 5)");
+                        System.out.println("Ahora introduce el tiempo de visualizacion en segundos (entre 1 y 5)");
                         segundos=leerN.nextInt();
                         if(segundos>0 && segundos<6){
                             ajustes[2]=(segundos*1000);
                             opajus=false;
                         }
                         else{
-                            System.out.println("Has introducido un número fuera de rango");
+                            System.out.println("Has introducido un numero fuera de rango");
                         }
                     }
                    
@@ -611,8 +461,8 @@ public class Memorion {
                         parejas=(ajustes[0]*ajustes[1])/2;
                         fallos=parejas+(parejas/2);
                        
-                        System.out.println("Introduce el número de fallos (el máximo dependerá del tamaño de la tabla");
-                        System.out.println("y no puede superar el número de parejas mas su mitad, en este caso: "+fallos+")");
+                        System.out.println("Introduce el numero de fallos (el máximo dependerá del tamaño de la tabla");
+                        System.out.println("y no puede superar el numero de parejas mas su mitad, en este caso: "+fallos+")");
                         ajustes[4]=leerN.nextInt();
                         ajustes[3]=0;
                        
@@ -625,10 +475,10 @@ public class Memorion {
                     }
                     
                     while(opajus){
-                        System.out.println("Por último elige el zoom: 1, 2 ó 3");
+                        System.out.println("Por ultimo elige el zoom: 1, 2 ó 3");
                         ajustes[5]=leerN.nextInt();
                         if(ajustes[5]!=1 && ajustes[5]!=2 && ajustes[5]!=3){
-                            System.out.println("No has introducido una opción válida");
+                            System.out.println("No has introducida una opción válida");
                         }
                         else{ 
                             opajus=false; 
@@ -674,12 +524,6 @@ public class Memorion {
                     System.out.println("Las mejores puntuaciones son"+Arrays.toString(tablaPuntos));                                                                                            
                    
                 break;
-                
-                case 'm':
-                    simbolos=simbolos(ajustes);
-                    matriz=rellenarMatriz(generarMatriz(ajustes),simbolos);
-                    maquinaFacil(matriz,ajustes);
-                break;    
                
                 case 's': salir=true;
                 break;
