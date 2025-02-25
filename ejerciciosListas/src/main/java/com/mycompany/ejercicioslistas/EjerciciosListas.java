@@ -10,6 +10,86 @@ import java.util.*;
  */
 public class EjerciciosListas {
     
+    public static ArrayList<Double> montarL(int cantidad,int minimo,int maximo){
+        ArrayList<Double> lista=new ArrayList<>();       
+        double alea;
+        int cont=0;
+        if(cantidad<=(maximo-minimo)+1){
+            while(cont!=cantidad){
+                alea=(int)((Math.random()*((maximo+1)-minimo))+minimo);
+                if(!lista.contains(alea)){
+                    lista.add(alea);
+                    cont++;
+                }
+            }
+        }
+        else{
+            while(cont!=cantidad){
+                alea=(int)(Math.random()*cantidad);
+                if(!lista.contains(alea)){
+                    lista.add(alea);
+                    cont++;
+                }
+            }
+        }
+        return lista;
+    }
+    
+    public static void partir(ArrayList<Double> origen, double pivote, ArrayList<Double> mayores,ArrayList<Double> menores){
+        for(int i=0;i<origen.size();i++){
+            if(origen.get(i)>=pivote){
+                mayores.add(origen.get(i));
+                
+            }
+            else{
+                menores.add(origen.get(i));
+                
+            }
+        }
+        origen.removeAll(origen);
+    }
+    
+    public static Double calcularPivote(ArrayList<Double> lista){
+        Double mediana=0.0;
+        int posicion=(int)(lista.size()/2);
+        mediana=lista.get(posicion);
+        
+        
+        return mediana;
+    }
+    
+    public static void ordenarM(ArrayList<Double> referencia){
+        ArrayList<Double> mayores=new ArrayList<>();
+        ArrayList<Double> menores=new ArrayList<>();
+        if(referencia.size()>1){
+            double pivote=calcularPivote(referencia);
+            referencia.remove(calcularPivote(referencia));
+            partir(referencia,pivote,mayores,menores);
+            ordenar(mayores);
+            ordenar(menores);
+            referencia.addAll(menores);
+            referencia.add(pivote);
+            referencia.addAll(mayores);            
+        }
+       
+    }
+    
+    public static void ordenar(ArrayList<Double> referencia){
+        ArrayList<Double> mayores=new ArrayList<>();
+        ArrayList<Double> menores=new ArrayList<>();
+        if(referencia.size()>1){
+            double pivote=referencia.get(0);
+            referencia.remove(0);
+            partir(referencia,pivote,mayores,menores);
+            ordenar(mayores);
+            ordenar(menores);
+            referencia.addAll(menores);
+            referencia.add(pivote);
+            referencia.addAll(mayores);            
+        }
+       
+    }
+    
     public static void montarM(int n, int q, ArrayList matriz){
         for(int i=0;i<n;i++){
             List<Double> fila=new ArrayList<>();
@@ -194,8 +274,8 @@ public class EjerciciosListas {
         System.out.println("----------------------------------------------------------------");
         
         
-        primosL(20,listaO);
-        System.out.println(listaO.toString());
+        //primosL(20,listaO);
+        //System.out.println(listaO.toString());
         
         
         System.out.println("----------------------------------------------------------------");
@@ -206,8 +286,41 @@ public class EjerciciosListas {
         
         System.out.println(matriz3.toString());
         
+        System.out.println("----------------------------------------------------------------");
         
+        ArrayList<Integer> listaI=new ArrayList<>();
+        ArrayList<Integer> listaP=new ArrayList<>();
         
+        for(int i=1;i<101;i++){
+            if(i%2==0){
+                listaP.add(i);
+            }
+            else{
+                listaI.add(i);
+            }
+        }
         
+        ArrayList<Integer> resul=new ArrayList<>();
+        for(int i=0; i<listaP.size();i++){
+            resul.add(listaI.get(i));
+            resul.add(listaP.get(i));
+        }
+        
+        System.out.println(resul.toString());
+        
+        System.out.println("----------------------------------------------------------------");
+        
+        ArrayList<Double> origen=montarL(20,1,200);
+        ArrayList<Double> mayores=new ArrayList<>();
+        ArrayList<Double> menores=new ArrayList<>();
+        
+        System.out.println(origen.toString());
+//        partir(origen,10.0,mayores,menores);
+//                
+//        System.out.println(mayores.toString());
+//        System.out.println(menores.toString());
+        
+        ordenarM(origen);
+        System.out.println(origen);
     }
 }
