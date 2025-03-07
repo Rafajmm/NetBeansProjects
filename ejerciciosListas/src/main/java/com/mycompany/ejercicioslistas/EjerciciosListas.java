@@ -322,5 +322,9 @@ public class EjerciciosListas {
         
         ordenarM(origen);
         System.out.println(origen);
+        
+        TreeMap<String,String> ejemplo=new TreeMap<>();
+        ejemplo.put("hola", "8");
+        ejemplo.size();
     }
 }
