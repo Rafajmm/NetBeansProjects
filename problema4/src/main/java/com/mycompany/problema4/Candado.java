@@ -61,6 +61,11 @@ public class Candado{
         return Objects.equals(this.comb, other.comb);
     }
 
+    @Override
+    public String toString() {
+        return "Candado{" + "comb=" + comb + ", estado=" + estado + '}';
+    }
+
     
     
     

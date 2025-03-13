@@ -28,5 +28,13 @@ public class Problema4 {
         System.out.println(c1.puedeAbrir());
         System.out.println(c1.mismaCombinacion(c2));
         
+        System.out.println("--------------------------------------------------------------------------------------");
+        
+        ArrayList<Candado> miau=new ArrayList<>();
+        for(int i=0;i<5;i++){
+            miau.add(new Candado(new ArrayList<>(Arrays.asList(3,i,2))));
+        }
+        
+        System.out.println(miau);
     }
 }
