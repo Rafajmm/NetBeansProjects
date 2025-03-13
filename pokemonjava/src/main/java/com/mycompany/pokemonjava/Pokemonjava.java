@@ -48,6 +48,7 @@ public class Pokemonjava {
         }
         System.out.println(pichu.mostrar());
         System.out.println(pichu.getClass());
+        System.out.println("----------------------------------------------------------------------------------------------");
         
         while(pichu.getExperiencia()<100){
             while(daño<100){
