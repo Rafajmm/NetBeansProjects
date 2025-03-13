@@ -11,8 +11,7 @@ public class Tren {
     private String llegada;
     private double precioPC;
     private double precioT;
-
-    // Constructor
+    
     public Tren(int numVagones, String salida, String llegada, double precioPC, double precioT) {
         this.numVagones = numVagones;
         this.salida=salida;
@@ -91,12 +90,11 @@ public class Tren {
     public double ventas(){
         double total=0.0;
         for(Vagon uno: vagones){
-            int nasientos=uno.contarOcupados();
             if(uno.getTipo()){
-                total+=nasientos*precioPC;
+                total+=uno.contarOcupados()*precioPC;
             }
             else{
-                total+=nasientos*precioT;
+                total+=uno.contarOcupados()*precioT;
             }
         }
         return total;
