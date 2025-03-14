@@ -177,7 +177,7 @@ public class EjerciciosListas {
         
         System.out.println("----------------------------------------------------------------");
         
-        /* Ejercicio 2
+        //Ejercicio 2
         ArrayList<String> palabras=new ArrayList<>();
         
         Scanner tecla=new Scanner(System.in);
@@ -189,18 +189,18 @@ public class EjerciciosListas {
             palabras.add(arrayS[i]);            
         }
         
-        //palabras.removeIf(letra -> letra.contains("a"));
+        palabras.removeIf(letra -> letra.contains("a"));
         
-        for(String palabra : palabras){
-            if(palabra.contains("a")){
-                palabras.remove(palabra);
-            }
-        }
+//        for(String palabra : palabras){
+//            if(palabra.contains("a")){
+//                palabras.remove(palabra);
+//            }
+//        }
         
         for(String palabra : palabras){
             System.out.println(palabra);
         }
-        */
+        
         
         System.out.println("----------------------------------------------------------------");
         
