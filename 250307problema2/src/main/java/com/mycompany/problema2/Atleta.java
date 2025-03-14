@@ -2,16 +2,22 @@ package com.mycompany.problema2;
 import java.util.*;
 
 public class Atleta implements Comparable{
-    String nombre;
-    int numero;
-    String nacionalidad;
-    HashMap<String,Double> tiempo=new HashMap<>();
+    private String nombre;
+    private int numero;
+    private String nacionalidad;
+    private double tiempo;
 
-    public Atleta(String nombre, int numero, String nacionalidad,HashMap<String,Double> tiempo) {
+    public Atleta(String nombre, int numero, String nacionalidad,double tiempo) {
         setNombre(nombre);
         setNumero(numero);
         setNacionalidad(nacionalidad);
         setTiempo(tiempo);
+    }
+    Atleta(){
+        setNombre("x");
+        setNumero(0);
+        setNacionalidad("f");
+        setTiempo(0.0);
     }
 
     public String getNombre() {
@@ -26,7 +32,7 @@ public class Atleta implements Comparable{
         return nacionalidad;
     }
 
-    public HashMap<String, Double> getTiempo() {
+    public double getTiempo() {
         return tiempo;
     }
 
@@ -42,15 +48,47 @@ public class Atleta implements Comparable{
         this.nacionalidad = nacionalidad;
     }
 
-    public void setTiempo(HashMap<String, Double> tiempo) {
+    public void setTiempo(double tiempo) {
         this.tiempo = tiempo;
     }
     
     @Override
     public int compareTo(Object otro){
-        Atleta other=(Atleta)otro;
-        int resul=0;
-        
-        return this.tiempo.values()-other.tiempo.values();
+        Atleta other=(Atleta)otro;                
+        return (int)(this.getTiempo()-other.getTiempo());
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Atleta other = (Atleta) obj;
+        if (this.numero != other.numero) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.tiempo) != Double.doubleToLongBits(other.tiempo)) {
+            return false;
+        }
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        return Objects.equals(this.nacionalidad, other.nacionalidad);
+    }
+
+    @Override
+    public String toString() {
+        return "Atleta{" + "nombre=" + nombre + ", numero=" + numero + ", nacionalidad=" + nacionalidad + ", tiempo=" + tiempo + '}';
+    }
+
+    
+    
+    
 }
