@@ -30,6 +30,7 @@ public class Pokemonjava {
     
     public static void main(String[] args) {
         Pichu pichu=new Pichu("rafa",0,15);
+        Pichu pichu2=new Pichu("rafa",0,15);
         int daño=0;
         
         while(pichu.getExperiencia()<50){
@@ -48,6 +49,7 @@ public class Pokemonjava {
         }
         System.out.println(pichu.mostrar());
         System.out.println(pichu.getClass());
+        System.out.println("----------------------------------------------------------------------------------------------");
         
         while(pichu.getExperiencia()<100){
             while(daño<100){
@@ -65,7 +67,7 @@ public class Pokemonjava {
         }
         System.out.println(pichu.mostrar());
         System.out.println(pichu.getClass());
-        
+        System.out.println(pichu.equals(pichu2));
        
         
         
