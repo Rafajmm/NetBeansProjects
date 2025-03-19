@@ -15,6 +15,10 @@ public class ManejarIni {
     private LinkedHashMap<String,String> contenido=new LinkedHashMap<>();
     
     ManejarIni(String ruta){
+       lectura(ruta); 
+    }
+    
+    public void lectura(String ruta){
         BufferedReader leer=null;      
         
         if(comprobarExtension(ruta)){   
@@ -33,10 +37,12 @@ public class ManejarIni {
                       }                      
                   }
                   linea=leer.readLine();
-                }                
-            }
+                }
+                leer.close();
+            }            
+            
             catch(IOException e){
-                
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -72,7 +78,23 @@ public class ManejarIni {
         else return false;
     }
     
-    
+    public void leer(String rutaUso, String rutaNueva){
+        BufferedWriter escribir=null;
+        try{
+            escribir=new BufferedWriter(new FileWriter(rutaUso));
+        
+            for(Map.Entry<String,String> entrada: contenido.entrySet()){
+                escribir.write(entrada.getKey()+"="+entrada.getValue());
+                escribir.newLine();
+            }
+            escribir.close();
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+        }
+        
+        lectura(rutaNueva);
+    }
     
     public boolean comprobarExtension(String ruta){
         String fin="";        
@@ -80,7 +102,7 @@ public class ManejarIni {
             fin+=ruta.charAt(i);
         }
         return fin.equals("ini.");
-    }        
+    }    
     
     public LinkedHashMap getContenido(){
         return contenido;

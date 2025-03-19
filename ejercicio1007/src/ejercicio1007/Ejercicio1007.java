@@ -42,6 +42,7 @@ public class Ejercicio1007 {
 //           }
 //       }
         String ruta="C:\\Users\\usuario\\Desktop\\xampp-control.ini";
+        String rutaN="C:\\Users\\usuario\\Desktop\\xampp-Prueba.ini";
         ManejarIni uno=new ManejarIni(ruta);
         System.out.println(uno.getContenido());
         
@@ -54,6 +55,10 @@ public class Ejercicio1007 {
         System.out.println(uno.consultar("miau"));
         System.out.println(uno.borrar("prueba"));
         System.out.println(uno.borrar("miau"));
+        System.out.println(uno.getContenido());
+        
+        uno.leer(ruta, rutaN);
+        
         System.out.println(uno.getContenido());
 
 
