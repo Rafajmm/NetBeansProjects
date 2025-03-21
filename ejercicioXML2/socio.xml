@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Socio id="1">
+    <nombre>pepe</nombre>
+    <direccion>calle parra</direccion>
+    <fechaAlta>21/03/2025</fechaAlta>
+    <amigos id="2">
+        <nombre>juan</nombre>
+        <direccion>calle perro</direccion>
+        <fechaAlta>01/03/2025</fechaAlta>
+    </amigos>
+    <amigos id="3">
+        <nombre>miguel</nombre>
+        <direccion>calle porra</direccion>
+        <fechaAlta>12/03/2025</fechaAlta>
+        <amigos id="5">
+            <nombre>antonio</nombre>
+            <direccion>calle porro</direccion>
+            <fechaAlta>16/03/2025</fechaAlta>
+            <amigos id="4">
+                <nombre>luis</nombre>
+                <direccion>calle puerro</direccion>
+                <fechaAlta>20/03/2025</fechaAlta>
+            </amigos>
+        </amigos>
+    </amigos>
+    <amigos id="4">
+        <nombre>luis</nombre>
+        <direccion>calle puerro</direccion>
+        <fechaAlta>20/03/2025</fechaAlta>
+    </amigos>
+    <amigos id="5">
+        <nombre>antonio</nombre>
+        <direccion>calle porro</direccion>
+        <fechaAlta>16/03/2025</fechaAlta>
+        <amigos id="4">
+            <nombre>luis</nombre>
+            <direccion>calle puerro</direccion>
+            <fechaAlta>20/03/2025</fechaAlta>
+        </amigos>
+    </amigos>
+</Socio>
