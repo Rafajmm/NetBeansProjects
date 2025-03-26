@@ -21,6 +21,7 @@ public class PruebaBaseDatos {
         ResultSet rs;
         String nombre="",consulta="";
         
+             
         System.out.println("Para consultar datos de un jugador introduce 1.\nPara añadir un jugador a la base de datos pulsa 2.\nPara actualizar el equipo de un jugador pulsa 3.\nPara eliminar un jugador pulsa 4.");
         int opcion=sc.nextInt();
         
@@ -101,6 +102,7 @@ public class PruebaBaseDatos {
                 
                 consulta="delete from jugadores where Nombre='"+nombre+"';";
                 try{
+                    sentencia.execute("set FOREIGN_KEY_CHECKS=0;");
                     int op4=sentencia.executeUpdate(consulta);
                     if(op4==1){
                         System.out.println("Jugador eliminado.");
