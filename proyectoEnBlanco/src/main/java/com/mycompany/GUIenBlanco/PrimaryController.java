@@ -71,6 +71,8 @@ public class PrimaryController implements Initializable
         //la raíz de nuestro proyecto es donde están las carpetas 'src' y 'target'
         //Ahí existe una carpeta 'imagenes' que contiene una imagen de muestra
         image.setImage(new Image("file:.//imagenes//muestra.png"));
+        
+        chMarca.setSelected(true);
     }
     
 }
