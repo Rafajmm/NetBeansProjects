@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.GUIenBlanco.PrimaryController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      <Label fx:id="lblTexto" layoutX="36.0" layoutY="57.0" text="Soy una etiqueta" wrapText="true" />
+      <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0" layoutX="228.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="botonButton" layoutX="285.0" layoutY="441.0" mnemonicParsing="false" text="Button" />
+      <CheckBox fx:id="chMarca" layoutX="284.0" layoutY="418.0" mnemonicParsing="false" text="Marca" />
+   </children>
+</Pane>
