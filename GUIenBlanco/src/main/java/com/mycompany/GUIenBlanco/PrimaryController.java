@@ -4,13 +4,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class PrimaryController implements Initializable
 {
@@ -27,6 +30,9 @@ public class PrimaryController implements Initializable
     @FXML
     private CheckBox chMarca;
     
+    @FXML
+    private ColorPicker selCol;
+    
     public PrimaryController()
     //constructor del controlador
     {
@@ -42,6 +48,7 @@ public class PrimaryController implements Initializable
         l.remove(0); //eliminamos el elemento en la posición 0
         
         System.out.println("Tamaño de la lista: " + l.size());
+        
         
     }
     
@@ -66,13 +73,18 @@ public class PrimaryController implements Initializable
                 + "4. En PRIMARY.FXML actualizar la etiqueta <Pane> para que apunte al controlador adecuado\n\n"
                 + "5. En module-info.java (<default package>), actualizar la primera línea (module...)";
         
-        lblTexto.setText(cadena);
+        lblTexto.setText(cadena);                
         
         //la raíz de nuestro proyecto es donde están las carpetas 'src' y 'target'
         //Ahí existe una carpeta 'imagenes' que contiene una imagen de muestra
         image.setImage(new Image("file:.//imagenes//muestra.png"));
         
-        chMarca.setSelected(true);
+        // Agregar manejador de evento para cuando se cambie el color en el ColorPicker
+        selCol.setOnAction(event -> {
+            Color uno = selCol.getValue();  // Obtiene el color seleccionado
+            lblTexto.setTextFill(uno);});   // Cambia el color del texto de lblTexto
+    
+        
     }
     
 }
