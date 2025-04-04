@@ -78,5 +78,18 @@ public class Persona {
         return nombre;
     }
     
+        public void clear(){
+        this.nombre="";
+
+        this.apellidos="";
+
+        this.direccion="";
+
+        this.ciudad="";
+
+        this.codigoPostal=0;
+
+        this.fechaDeNacimiento= LocalDate.of(1970, 1, 1);
+    }
     
 }

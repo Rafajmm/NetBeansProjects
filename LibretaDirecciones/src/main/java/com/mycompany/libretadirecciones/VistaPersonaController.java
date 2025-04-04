@@ -11,6 +11,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -49,6 +52,15 @@ public class VistaPersonaController implements Initializable{
     @FXML
     private Label fechaDeNacimientoLabel;
 
+    @FXML
+    private Button botonBorrar;
+    
+    @FXML
+    private Button botonNuevo;
+    
+    @FXML
+    private Button botonEditar;
+    
     // Referencia a la clase principal
     private LibretaDirecciones libretaDirecciones;
 
@@ -94,8 +106,7 @@ public class VistaPersonaController implements Initializable{
         
         //OPCIÓN 3: realizar un proceso parecido a los comparadores que implementan Comparator: crear una clase nueva y usar una instancia que se pasa como argumento al método  'addListener(ChangeListener cl)'
         //Os dejo como ejercicio crear esta nueva clase que se usaría con el siguiente código
-        //ListenerParaTabla cl = new ListenerParaTabla(this);
-        
+        //ListenerParaTabla cl = new ListenerParaTabla(this); 
         //tablaPersonas.getSelectionModel().selectedItemProperty().addListener(cl);
     }
     
@@ -144,11 +155,99 @@ public class VistaPersonaController implements Initializable{
         }
     }
 
-//    @Override
-//    public void changed(ObservableValue ov, Object t, Object t1) {
-//        mostrarDetallesPersona((Persona)newValue);
-//    }
+//Borro la persona seleccionada cuando el usuario hace clic en el botón de Borrar
 
+    @FXML
+
+    private void borrarPersona() {
+
+        //Capturo el indice seleccionado y borro su item asociado de la tabla
+
+        int indiceSeleccionado = tablaPersonas.getSelectionModel().getSelectedIndex();
+
+        if (indiceSeleccionado >= 0){
+
+            //Borro item
+
+            tablaPersonas.getItems().remove(indiceSeleccionado);
+
+
+        } else {
+
+            //Muestro alerta
+
+            Alert alerta = new Alert(AlertType.WARNING);
+
+            alerta.setTitle("Atención");
+
+            alerta.setHeaderText("Persona no seleccionada");
+
+            alerta.setContentText("Por favor, selecciona una persona de la tabla");
+
+            alerta.showAndWait();
+
+
+        }
+
+    }
+
+    //Muestro el diálogo editar persona cuando el usuario hace clic en el botón de Crear
+
+    @FXML
+
+    private void crearPersona() {
+
+        Persona temporal = new Persona();
+        
+        temporal.clear();
+
+        boolean guardarClicked = libretaDirecciones.muestraEditarPersona(temporal);
+
+        if (guardarClicked) {
+
+            libretaDirecciones.getDatosPersona().add(temporal);
+
+        }
+
+    }
+
+
+    //Muestro el diálogo editar persona cuando el usuario hace clic en el botón de Editar
+
+    @FXML
+
+    private void editarPersona() {
+
+        Persona seleccionada = (Persona) tablaPersonas.getSelectionModel().getSelectedItem();
+
+        if (seleccionada != null) {
+
+            boolean guardarClicked = libretaDirecciones.muestraEditarPersona(seleccionada);
+
+            if (guardarClicked) {
+
+                mostrarDetallesPersona(seleccionada);
+
+            }
+
+
+        } else {
+
+            //Muestro alerta
+
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+
+            alerta.setTitle("Alerta");
+
+            alerta.setHeaderText("Persona no seleccionada");
+
+            alerta.setContentText("Por favor, selecciona una persona");
+
+            alerta.showAndWait();
+
+        }
+
+    }
     
     
     
