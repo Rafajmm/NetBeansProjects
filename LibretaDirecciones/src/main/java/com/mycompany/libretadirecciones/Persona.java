@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.libretadirecciones;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.time.Month;
 /**
@@ -62,8 +63,10 @@ public class Persona {
         this.codigoPostal = codigoPostal;
     }
 
+    @XmlJavaTypeAdapter(AdaptadorDeFechas.class)
     public LocalDate getFechaDeNacimiento() {
         return fechaDeNacimiento;
+
     }
 
     public void setFechaDeNacimiento(LocalDate fechaDeNacimiento) {
