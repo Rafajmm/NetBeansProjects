@@ -9,31 +9,19 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
 
-/**
- * FXML Controller class
- *
- * @author usuario
- */
+
 public class VistaPrincipalController implements Initializable {
 
-    private LibretaDirecciones libretaDirecciones;
-    private TableView tablaPersonas;
-    /**
-     * Initializes the controller class.
-     */
+    private LibretaDirecciones libretaDirecciones;    
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }
 
     public void setLibretaDirecciones(LibretaDirecciones libretaDirecciones){
-        this.libretaDirecciones = libretaDirecciones;
-
-        //Añado la lista obervable a la tabla
-        //Si en el método initialize no usamos los métodos setCellValueFactory, ahora tendríamos que recorrer la lista e
-        //insertar los valores uno a uno en la tabla
-
-        tablaPersonas.setItems(libretaDirecciones.getDatosPersona());
+        this.libretaDirecciones = libretaDirecciones;      
     }
     
 }
