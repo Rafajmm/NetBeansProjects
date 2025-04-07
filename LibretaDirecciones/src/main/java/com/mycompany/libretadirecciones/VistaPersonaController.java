@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -60,6 +61,9 @@ public class VistaPersonaController implements Initializable{
     
     @FXML
     private Button botonEditar;
+    
+    @FXML
+    private CheckBox chkSQL;
     
     // Referencia a la clase principal
     private LibretaDirecciones libretaDirecciones;

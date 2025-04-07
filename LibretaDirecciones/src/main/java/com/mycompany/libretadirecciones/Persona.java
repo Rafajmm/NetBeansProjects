@@ -31,6 +31,15 @@ public class Persona {
         this.fechaDeNacimiento=LocalDate.of(1974, 6, 15);
     }
 
+    public Persona(String nombre, String apellidos, String direccion, String ciudad, Integer codigoPostal, LocalDate fechaDeNacimiento) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.direccion = direccion;
+        this.ciudad = ciudad;
+        this.codigoPostal = codigoPostal;
+        this.fechaDeNacimiento = fechaDeNacimiento;
+    }       
+
     public String getApellidos() {
         return apellidos;
     }

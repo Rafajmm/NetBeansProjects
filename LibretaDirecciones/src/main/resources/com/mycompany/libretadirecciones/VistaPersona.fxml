@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
 <AnchorPane id="AnchorPane" prefHeight="480.0" prefWidth="640.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.libretadirecciones.VistaPersonaController">
@@ -58,12 +59,16 @@
                         <Label fx:id="fechaDeNacimientoLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
-                  <Button fx:id="botonBorrar" layoutX="289.0" layoutY="432.0" mnemonicParsing="false" onAction="#borrarPersona" text="Borrar" />
-                  <Button fx:id="botonEditar" layoutX="190.0" layoutY="432.0" mnemonicParsing="false" onAction="#editarPersona" text="Editar" />
-                  <Button fx:id="botonNuevo" layoutX="87.0" layoutY="432.0" mnemonicParsing="false" onAction="#crearPersona" text="Nuevo" />
                </children>
             </AnchorPane>
         </items>
       </SplitPane>
+      <HBox layoutX="311.0" layoutY="431.0" prefHeight="36.0" prefWidth="298.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <children>
+            <Button fx:id="botonNuevo" mnemonicParsing="false" onAction="#crearPersona" text="Nuevo" />
+            <Button fx:id="botonBorrar" mnemonicParsing="false" onAction="#borrarPersona" text="Borrar" />
+            <Button fx:id="botonEditar" mnemonicParsing="false" onAction="#editarPersona" text="Editar" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

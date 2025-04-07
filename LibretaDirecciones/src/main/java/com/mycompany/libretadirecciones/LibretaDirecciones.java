@@ -5,6 +5,7 @@ import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -37,6 +38,7 @@ public class LibretaDirecciones extends Application
     
     private ObservableList datosPersona=FXCollections.observableArrayList();
     
+    private ConectorSQL conexionSQL;
     
     public LibretaDirecciones(){
         datosPersona.add(new Persona("Jairo","García Rincón"));
@@ -58,8 +60,10 @@ public class LibretaDirecciones extends Application
     }
 
     @Override
-    public void start(Stage escenarioPrincipal) throws IOException {
-        
+    public void start(Stage escenarioPrincipal) throws IOException, SQLException {
+        conexionSQL=new ConectorSQL("jdbc:mysql://localhost/Contactos","root","");
+        datosPersona.clear();
+        datosPersona.addAll(conexionSQL.getPersonas());
         
         FXMLLoader vista = new FXMLLoader(LibretaDirecciones.class.getResource("VistaPrincipal.fxml"));
             
@@ -166,8 +170,9 @@ public class LibretaDirecciones extends Application
             //Marshall y guardo XML a archivo
 
             m.marshal(empaquetador, archivo);
-
-
+            //Guardar en la base de datos
+            conexionSQL.putPersonas(datosPersona);
+            
 
         } catch (Exception e) { // catches ANY exception
 
@@ -183,8 +188,7 @@ public class LibretaDirecciones extends Application
 
             alerta.showAndWait();
 
-        }
-
+        }                                
     }
     
     public void crearGrafico() {
