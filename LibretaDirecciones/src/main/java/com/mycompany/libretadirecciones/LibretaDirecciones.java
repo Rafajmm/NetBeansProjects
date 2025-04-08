@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.scene.layout.AnchorPane;
@@ -40,6 +41,8 @@ public class LibretaDirecciones extends Application
     
     private ConectorSQL conexionSQL;
     
+    private VistaPersonaController controladorVisPer;
+    
     public LibretaDirecciones(){
         datosPersona.add(new Persona("Jairo","García Rincón"));
         
@@ -66,7 +69,7 @@ public class LibretaDirecciones extends Application
         datosPersona.addAll(conexionSQL.getPersonas());
         
         FXMLLoader vista = new FXMLLoader(LibretaDirecciones.class.getResource("VistaPrincipal.fxml"));
-            
+
         layoutPrincipal = vista.load();
 
         escenaPrincipal = new Scene(layoutPrincipal);
@@ -170,11 +173,16 @@ public class LibretaDirecciones extends Application
             //Marshall y guardo XML a archivo
 
             m.marshal(empaquetador, archivo);
-            //Guardar en la base de datos
-            conexionSQL.putPersonas(datosPersona);
             
-
-        } catch (Exception e) { // catches ANY exception
+            muestraVistaPersona();
+            if(controladorVisPer.comprobarCheck()){
+                //Guardar en la base de datos
+                conexionSQL.putPersonas(datosPersona);
+            }
+            System.out.println(controladorVisPer.comprobarCheck());
+        } 
+        
+        catch (Exception e) { // catches ANY exception
 
             //Muestro alerta
 
@@ -295,9 +303,9 @@ public class LibretaDirecciones extends Application
               
              //Doy acceso al controlador VistaPersonaCOntroller a LibretaDirecciones
 
-             VistaPersonaController controller = vista.getController();
+             controladorVisPer = vista.getController();
 
-             controller.setLibretaDirecciones(this);
+             controladorVisPer.setLibretaDirecciones(this);
 
          } catch (Exception ex) {
              System.out.println(ex.getMessage());

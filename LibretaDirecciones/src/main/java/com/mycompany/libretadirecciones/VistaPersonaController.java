@@ -253,7 +253,10 @@ public class VistaPersonaController implements Initializable{
 
     }
     
-    
+    public boolean comprobarCheck(){
+        boolean cond=chkSQL.isSelected();
+        return cond;
+    }
     
     
 }
