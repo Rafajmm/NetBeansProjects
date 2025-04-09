@@ -3,12 +3,12 @@
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="450.0" prefWidth="620.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.mycompany.libretadirecciones.VistaEstadisticasController">
+<AnchorPane id="AnchorPane" prefHeight="450.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.libretadirecciones.VistaEstadisticasController">
    <children>
-      <BarChart fx:id="graficoBarras" layoutX="14.0" layoutY="25.0" prefHeight="450.0" prefWidth="620.0" title="Fecha de nacimiento" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BarChart fx:id="graficoBarras" layoutX="14.0" layoutY="25.0" prefHeight="420.0" prefWidth="620.0" title="Fecha de nacimiento" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <xAxis>
           <CategoryAxis fx:id="ejeX" side="BOTTOM" />
         </xAxis>
@@ -16,5 +16,6 @@
           <NumberAxis fx:id="ejeY" side="LEFT" />
         </yAxis>
       </BarChart>
+      <Button fx:id="botonPDF" layoutX="42.0" layoutY="408.0" mnemonicParsing="false" onAction="#generarPDF" text="Generar PDF" />
    </children>
 </AnchorPane>

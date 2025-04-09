@@ -43,16 +43,9 @@ public class LibretaDirecciones extends Application
     
     private VistaPersonaController controladorVisPer;
     
-    public LibretaDirecciones(){
-        datosPersona.add(new Persona("Jairo","García Rincón"));
-        
-        datosPersona.add(new Persona("Juan", "Pérez Martínez"));
-
-        datosPersona.add(new Persona("Andrea", "Chenier López"));
-
-        datosPersona.add(new Persona("Emilio", "González Pla"));
-
-        datosPersona.add(new Persona("Mónica", "de Santos Sánchez"));
+    private VistaEstadisticasController contEst;
+    
+    public LibretaDirecciones(){        
     }
     
     //Método para devolver los datos como lista observable de persona
@@ -172,9 +165,8 @@ public class LibretaDirecciones extends Application
 
             //Marshall y guardo XML a archivo
 
-            m.marshal(empaquetador, archivo);
+            m.marshal(empaquetador, archivo);                        
             
-            muestraVistaPersona();
             if(controladorVisPer.comprobarCheck()){
                 //Guardar en la base de datos
                 conexionSQL.putPersonas(datosPersona);
@@ -204,26 +196,43 @@ public class LibretaDirecciones extends Application
         //Cargo la vista estadísticas
        
          try {
-            Scene escenaGrafico;
-            FXMLLoader vista = new FXMLLoader(LibretaDirecciones.class.getResource("VistaEstadisticas.fxml"));
-            escenaGrafico = new Scene(vista.load());
+            if(datosPersona.size()<1){
+                Alert alerta = new Alert(Alert.AlertType.WARNING);
+
+                alerta.setTitle("Alerta");
+
+                alerta.setHeaderText("Persona no seleccionada");
+
+                alerta.setContentText("Por favor, selecciona una persona");
+
+                alerta.showAndWait();
+            } 
             
-             //Inicializo un nuevo escenario y asigno el principal
-            Stage escenarioEstadisticas = new Stage();
-            escenarioEstadisticas.setScene(escenaGrafico);
-            escenarioEstadisticas.setTitle("Estadísticas");
-            
-            escenarioEstadisticas.getIcons().add(new Image("file:./src/main/resources/com/mycompany/LibretaDirecciones/iconoStats32.png")); //Ojo con la ruta!!
-                
-            escenarioEstadisticas.initModality(Modality.WINDOW_MODAL);
-            
-            //Asigno el controlador
-            VistaEstadisticasController controller = vista.getController();
-            
-            controller.setDatosPersona(datosPersona);
-            
-            //Muestro el escenario
-            escenarioEstadisticas.show();
+            else{
+                Scene escenaGrafico;
+                FXMLLoader vista = new FXMLLoader(LibretaDirecciones.class.getResource("VistaEstadisticas.fxml"));            
+                escenaGrafico = new Scene(vista.load());
+
+                 //Inicializo un nuevo escenario y asigno el principal
+                Stage escenarioEstadisticas = new Stage();
+                escenarioEstadisticas.setScene(escenaGrafico);
+                escenarioEstadisticas.setTitle("Estadísticas");
+
+                escenarioEstadisticas.getIcons().add(new Image("file:./src/main/resources/com/mycompany/LibretaDirecciones/iconoStats32.png")); //Ojo con la ruta!!
+
+                escenarioEstadisticas.initModality(Modality.WINDOW_MODAL);
+
+                //Asigno el controlador
+                VistaEstadisticasController controller = vista.getController();
+
+                controller.setDatosPersona(datosPersona);                       
+
+                //Muestro el escenario
+                escenarioEstadisticas.show();
+
+                contEst=vista.getController();
+                contEst.setLibretaDirecciones(this);
+            }
             
          } catch (Exception ex) {
              System.out.println(ex.getMessage());
@@ -232,7 +241,7 @@ public class LibretaDirecciones extends Application
     }
     
     public void crearPDF() throws IOException{
-
+                      
         //Creo un nuevo documento, una página y la añado
         PDDocument documento = new PDDocument();
         PDPage pagina = new PDPage();
@@ -248,6 +257,7 @@ public class LibretaDirecciones extends Application
 
         //Recorro la lista de personas
         List<Persona> personas = datosPersona;
+                
         for (Persona p : personas) {
             //Inicio un nuevo texto y escribo los datos
             contentStream.beginText();
@@ -289,6 +299,7 @@ public class LibretaDirecciones extends Application
             documento.close();
 
         }
+                        
     }
     
     public void muestraVistaPersona(){

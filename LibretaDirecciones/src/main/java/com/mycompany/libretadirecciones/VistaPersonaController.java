@@ -258,5 +258,16 @@ public class VistaPersonaController implements Initializable{
         return cond;
     }
     
-    
+    public void mensEst(){
+        Alert alerta = new Alert(AlertType.WARNING);
+
+            alerta.setTitle("Atención");
+            if(!chkSQL.isSelected()) alerta.setHeaderText("False");
+            else alerta.setHeaderText("True");
+
+            if(chkSQL.isSelected()) alerta.setContentText("true");
+            else alerta.setContentText("false");
+
+            alerta.showAndWait();
+    }
 }

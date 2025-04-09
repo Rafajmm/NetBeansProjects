@@ -4,6 +4,7 @@
  */
 package com.mycompany.libretadirecciones;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -16,10 +17,12 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 
 
 public class VistaEstadisticasController implements Initializable {
-
+    
+    
     //Se invoca justo después de que se ha cargado el archivo FXML
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -45,6 +48,11 @@ public class VistaEstadisticasController implements Initializable {
 
     @FXML
     private NumberAxis ejeY;
+    
+    @FXML
+    private Button botonPDF;
+    
+    private LibretaDirecciones libretaD;
 
     private ObservableList<String> nombreMeses = FXCollections.observableArrayList();
 
@@ -68,6 +76,16 @@ public class VistaEstadisticasController implements Initializable {
         //Añado la serie al gráfico
         graficoBarras.getData().add(series);
 
+    }
+    
+    public void setLibretaDirecciones(LibretaDirecciones libretaDirecciones) {
+
+        this.libretaD=libretaDirecciones;
+
+    }
+    
+    public void generarPDF() throws IOException{
+        libretaD.crearPDF();
     }
 
 }
