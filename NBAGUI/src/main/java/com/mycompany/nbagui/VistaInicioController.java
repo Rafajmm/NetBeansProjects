@@ -20,6 +20,7 @@ public class VistaInicioController implements Initializable {
     private NBAGUI nbagui;
     private ManejarIni mIni;
     private static final String rutaConfig = "./config.ini"; // Cambiado a ruta relativa más simple
+    private ConectorSQL conector;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -38,13 +39,12 @@ public class VistaInicioController implements Initializable {
             tfUsuario.setText(mIni.getUsuario());
             tfContraseña.setText(mIni.getPsswd());
         } catch (Exception e) {
-            mostrarAlerta("Error", "No se pudo cargar la configuración", 
-                         "Se creará un archivo de configuración nuevo.");
+            mostrarAlerta("Error", "No se pudo cargar la configuración", "Se creará un archivo de configuración nuevo.");
             crearConfiguracionPorDefecto();
         }
     }
     
-    private void manejarConexion() {
+    public void manejarConexion() {
         // Validar campos
         if (tfIP.getText().isEmpty() || tfUsuario.getText().isEmpty()) {
             mostrarAlerta("Error", "Campos vacíos", 
@@ -58,20 +58,19 @@ public class VistaInicioController implements Initializable {
         mIni.cambiar("psswd", tfContraseña.getText());
         mIni.guardarArchivo(rutaConfig); // Guardar cambios
         
-        // Intentar conectar (aquí iría tu lógica de conexión)
+        // Intentar conectar 
         try {
+            conector = new ConectorSQL(mIni.getDbUrl(),mIni.getUsuario(),mIni.getPsswd());
             //nbagui.cambiarVista("VistaPrincipal"); // Cambiar a vista principal si conexión exitosa
-            mostrarAlerta("Éxito", "Conexión establecida", 
-                        "Configuración guardada correctamente");
+            mostrarAlerta("Éxito", "Conexión establecida", "Configuración guardada correctamente");
         } catch (Exception e) {
-            mostrarAlerta("Error", "Error de conexión", 
-                        "No se pudo establecer conexión: " + e.getMessage());
+            mostrarAlerta("Error", "Error de conexión", "No se pudo establecer conexión: " + e.getMessage());
         }
     }
     
     private void crearConfiguracionPorDefecto() {
         mIni.cambiar("dbUrl", "localhost");
-        mIni.cambiar("usuario", "admin");
+        mIni.cambiar("usuario", "root");
         mIni.cambiar("psswd", "");
         mIni.guardarArchivo(rutaConfig);
     }
@@ -86,5 +85,9 @@ public class VistaInicioController implements Initializable {
     
     public void setNBAGUI(NBAGUI nbagui) {
         this.nbagui = nbagui;
+    }
+    
+    public void Salir(){
+        System.exit(0);
     }
 }

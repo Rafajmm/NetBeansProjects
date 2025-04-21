@@ -20,15 +20,15 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="tfIP" layoutX="327.0" layoutY="200.0" AnchorPane.leftAnchor="328.0" AnchorPane.topAnchor="200.0" />
-      <TextField fx:id="tfUsuario" layoutX="328.0" layoutY="281.0" AnchorPane.leftAnchor="328.0" AnchorPane.topAnchor="281.0" />
-      <TextField fx:id="tfContraseña" layoutX="328.0" layoutY="360.0" AnchorPane.leftAnchor="328.0" AnchorPane.topAnchor="360.0" />
+      <TextField fx:id="tfIP" layoutX="327.0" layoutY="200.0" prefHeight="26.0" prefWidth="297.0" AnchorPane.leftAnchor="328.0" AnchorPane.topAnchor="200.0" />
+      <TextField fx:id="tfUsuario" layoutX="328.0" layoutY="281.0" prefHeight="26.0" prefWidth="297.0" AnchorPane.leftAnchor="328.0" AnchorPane.topAnchor="281.0" />
+      <TextField fx:id="tfContraseña" layoutX="328.0" layoutY="360.0" prefHeight="26.0" prefWidth="297.0" AnchorPane.leftAnchor="328.0" AnchorPane.topAnchor="360.0" />
       <Label layoutX="64.0" layoutY="285.0" text="Introduce el usuario" AnchorPane.leftAnchor="64.0" AnchorPane.topAnchor="285.0">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="64.0" layoutY="359.0" prefHeight="27.0" prefWidth="187.0" text="Introduce la contraseña" AnchorPane.leftAnchor="64.0" AnchorPane.topAnchor="359.0">
+      <Label layoutX="64.0" layoutY="359.0" prefHeight="27.0" prefWidth="217.0" text="Introduce la contraseña" AnchorPane.leftAnchor="64.0" AnchorPane.topAnchor="359.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -38,7 +38,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="botonSalir" layoutX="454.0" layoutY="625.0" mnemonicParsing="false" text="Salir" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="454.0">
+      <Button fx:id="botonSalir" layoutX="454.0" layoutY="625.0" mnemonicParsing="false" onAction="#Salir" text="Salir" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="454.0">
          <font>
             <Font size="18.0" />
          </font>
