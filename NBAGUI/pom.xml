@@ -5,6 +5,7 @@
     <artifactId>NBAGUI</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
+        <mainClass>com.mycompany.nbagui.NBAGUI</mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -70,7 +71,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>com.mycompany.nbagui.App</mainClass>
+                    <mainClass>com.mycompany.nbagui.NBAGUI</mainClass>
                 </configuration>
                 <executions>
                     <execution>

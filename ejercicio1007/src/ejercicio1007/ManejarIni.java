@@ -13,6 +13,10 @@ import java.io.*;
  */
 public class ManejarIni {
     private LinkedHashMap<String,String> contenido=new LinkedHashMap<>();
+    private String dbUrl;
+    private String usuario;
+    private String psswd;
+    
     
     ManejarIni(String ruta){
        lectura(ruta); 
@@ -21,7 +25,7 @@ public class ManejarIni {
     public void lectura(String ruta){
         BufferedReader leer=null;      
         
-        if(comprobarExtension(ruta)){   
+        if(comprobarIni(ruta)){   
             try{
                 leer=new BufferedReader(new FileReader(ruta));
                 String linea=leer.readLine().trim();
@@ -30,7 +34,7 @@ public class ManejarIni {
                   if(!linea.startsWith("[") && !linea.startsWith(";") && !linea.startsWith("#")){  //comprobamos 
                       String lin[]=linea.split("=");
                       if(lin.length<2){
-                          contenido.put(lin[0].trim(),null); //si la variable está vacía (por ejemplo, "Edition=") añadimos null como valor.
+                          contenido.put(lin[0].trim(),""); //si la variable está vacía (por ejemplo, "Edition=") añadimos null como valor.
                       }
                       else{
                           contenido.put(lin[0].trim(),lin[1].trim());
@@ -39,13 +43,29 @@ public class ManejarIni {
                   linea=leer.readLine();
                 }
                 leer.close();
-            }            
+                
+                
             
+            
+                for(Map.Entry<String,String> entrada: contenido.entrySet()){
+                    if(entrada.getKey().equals("dbUrl")){
+                        this.dbUrl=entrada.getValue();
+                    }
+                    else if(entrada.getKey().equals("usuario")){
+                        this.usuario=entrada.getValue();
+                    }
+                    else if(entrada.getKey().equals("psswd")){
+                        this.psswd=entrada.getValue();
+                    }
+                }
+            }
             catch(IOException e){
                 System.out.println(e.getMessage());
             }
         }
     }
+    
+    
     
     public boolean cambiar(String key, String value){
        if(contenido.containsKey(key)){
@@ -96,15 +116,24 @@ public class ManejarIni {
         lectura(rutaNueva);
     }
     
-    public boolean comprobarExtension(String ruta){
+    public boolean comprobarIni(String ruta){
         String fin="";        
         for(int i=ruta.length()-1;i>ruta.length()-5;i--){
             fin+=ruta.charAt(i);
         }
         return fin.equals("ini.");
-    }    
+    }
+
+    public boolean comprobarXml(String ruta){
+        String fin="";        
+        for(int i=ruta.length()-1;i>ruta.length()-5;i--){
+            fin+=ruta.charAt(i);
+        }
+        return fin.equals("lmx.");
+    }
     
     public LinkedHashMap getContenido(){
         return contenido;
     }
 }
+

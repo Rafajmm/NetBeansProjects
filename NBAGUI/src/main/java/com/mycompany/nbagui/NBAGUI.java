@@ -5,47 +5,37 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 
-/**
- * JavaFX NBAGUI
- */
 public class NBAGUI extends Application {
     
     private static Scene escenaPrincipal;
-
-    private BorderPane layoutPrincipal;
-
-    private AnchorPane vistaInicio;
+    private VistaInicioController inicioController;
     
-    private ObservableList datosPersona=FXCollections.observableArrayList(); 
-    
-    private ConectorSQL conexion;
-    
-
     @Override
-    public void start(Stage stage) throws IOException {
-        escenaPrincipal = new Scene(loadFXML("primary"), 640, 480);
-        stage.setScene(escenaPrincipal);
-        stage.show();
+    public void start(Stage escenarioPrincipal) throws IOException {
+        // Cargar vista de inicio
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("VistaInicio.fxml"));
+        Parent vistaInicio = loader.load();
+        
+        // Obtener controlador y configurar
+        inicioController = loader.getController();
+        inicioController.setNBAGUI(this);
+        inicioController.cargarConfiguracionInicial(); // Nueva función
+        
+        // Configurar escena
+        escenaPrincipal = new Scene(vistaInicio);
+        escenarioPrincipal.setScene(escenaPrincipal);
+        escenarioPrincipal.setTitle("NBA");
+        escenarioPrincipal.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
-        escenaPrincipal.setRoot(loadFXML(fxml));
-    }
-
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(NBAGUI.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+    public static void cambiarVista(String fxml) throws IOException {
+        FXMLLoader loader = new FXMLLoader(NBAGUI.class.getResource(fxml + ".fxml"));
+        escenaPrincipal.setRoot(loader.load());
     }
 
     public static void main(String[] args) {
         launch();
     }
-
 }
