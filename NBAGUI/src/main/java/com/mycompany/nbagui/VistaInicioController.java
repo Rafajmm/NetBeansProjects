@@ -19,7 +19,7 @@ public class VistaInicioController implements Initializable {
     
     private NBAGUI nbagui;
     private ManejarIni mIni;
-    private static final String RUTA_CONFIG = "./config.ini"; // Cambiado a ruta relativa más simple
+    private static final String rutaConfig = "./config.ini"; // Cambiado a ruta relativa más simple
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -33,7 +33,7 @@ public class VistaInicioController implements Initializable {
     
     public void cargarConfiguracionInicial() {
         try {
-            mIni = new ManejarIni(RUTA_CONFIG);
+            mIni = new ManejarIni(rutaConfig);
             tfIP.setText(mIni.getDbUrl());
             tfUsuario.setText(mIni.getUsuario());
             tfContraseña.setText(mIni.getPsswd());
@@ -56,7 +56,7 @@ public class VistaInicioController implements Initializable {
         mIni.cambiar("dbUrl", tfIP.getText());
         mIni.cambiar("usuario", tfUsuario.getText());
         mIni.cambiar("psswd", tfContraseña.getText());
-        mIni.guardarArchivo(RUTA_CONFIG); // Guardar cambios
+        mIni.guardarArchivo(rutaConfig); // Guardar cambios
         
         // Intentar conectar (aquí iría tu lógica de conexión)
         try {
@@ -73,7 +73,7 @@ public class VistaInicioController implements Initializable {
         mIni.cambiar("dbUrl", "localhost");
         mIni.cambiar("usuario", "admin");
         mIni.cambiar("psswd", "");
-        mIni.guardarArchivo(RUTA_CONFIG);
+        mIni.guardarArchivo(rutaConfig);
     }
     
     private void mostrarAlerta(String titulo, String encabezado, String contenido) {
