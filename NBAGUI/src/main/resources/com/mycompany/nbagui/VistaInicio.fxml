@@ -33,7 +33,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="butonAceptar" layoutX="317.0" layoutY="625.0" mnemonicParsing="false" text="Aceptar" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="317.0">
+      <Button fx:id="butonAceptar" layoutX="317.0" layoutY="625.0" mnemonicParsing="false" onAction="#manejarConexion" text="Aceptar" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="317.0">
          <font>
             <Font size="18.0" />
          </font>

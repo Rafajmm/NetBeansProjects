@@ -24,13 +24,9 @@ public class VistaInicioController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        configurarEventos();
+        
     }
-    
-    private void configurarEventos() {
-        butonAceptar.setOnAction(e -> manejarConexion());
-        botonSalir.setOnAction(e -> System.exit(0));
-    }
+
     
     public void cargarConfiguracionInicial() {
         try {
@@ -61,7 +57,7 @@ public class VistaInicioController implements Initializable {
         // Intentar conectar 
         try {
             conector = new ConectorSQL(mIni.getDbUrl(),mIni.getUsuario(),mIni.getPsswd());
-            //nbagui.cambiarVista("VistaPrincipal"); // Cambiar a vista principal si conexión exitosa
+            nbagui.cambiarVista("VistaPrincipal"); // Cambiar a vista principal si conexión exitosa
             mostrarAlerta("Éxito", "Conexión establecida", "Configuración guardada correctamente");
         } catch (Exception e) {
             mostrarAlerta("Error", "Error de conexión", "No se pudo establecer conexión: " + e.getMessage());
