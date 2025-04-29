@@ -11,6 +11,7 @@ public class NBAGUI extends Application {
     
     private static Scene escenaPrincipal;
     private VistaInicioController inicioController;
+    private VistaPrincipalController principalController;
     
     @Override
     public void start(Stage escenarioPrincipal) throws IOException {
@@ -18,16 +19,24 @@ public class NBAGUI extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("VistaInicio.fxml"));
         Parent vistaInicio = loader.load();
         
-        // Obtener controlador y configurar
+        
         inicioController = loader.getController();
         inicioController.setNBAGUI(this);
-        inicioController.cargarConfiguracionInicial(); // Nueva función
+        if(inicioController.cargarConfiguracionInicial()){
+            loader=new FXMLLoader(getClass().getResource("VistaPrincipal.fxml"));
+            vistaInicio=loader.load();
+            escenaPrincipal = new Scene(vistaInicio);
+            escenarioPrincipal.setScene(escenaPrincipal);
+            escenarioPrincipal.setTitle("NBA");
+            escenarioPrincipal.show();
+        }
         
-        // Configurar escena
-        escenaPrincipal = new Scene(vistaInicio);
-        escenarioPrincipal.setScene(escenaPrincipal);
-        escenarioPrincipal.setTitle("NBA");
-        escenarioPrincipal.show();
+        else{            
+            escenaPrincipal = new Scene(vistaInicio);
+            escenarioPrincipal.setScene(escenaPrincipal);
+            escenarioPrincipal.setTitle("NBA");
+            escenarioPrincipal.show();
+        }
     }
 
     public static void cambiarVista(String fxml) throws IOException {

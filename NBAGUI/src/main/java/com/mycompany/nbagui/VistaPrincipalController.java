@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  * @author rafa
  */
 public class VistaPrincipalController implements Initializable {
-
+    private NBAGUI nba;
     /**
      * Initializes the controller class.
      */
@@ -23,4 +23,7 @@ public class VistaPrincipalController implements Initializable {
         // TODO
     }    
     
+    public void setNBAGUI(NBAGUI nba){
+        this.nba=nba;
+    }
 }

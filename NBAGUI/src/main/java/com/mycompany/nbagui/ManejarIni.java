@@ -43,8 +43,8 @@ public class ManejarIni {
             }
         } catch (IOException e) {
             System.err.println("Error al leer archivo: " + e.getMessage());
-            contenido.put("dbUrl", "localhost");
-            contenido.put("usuario", "admin");
+            contenido.put("dbUrl", "");
+            contenido.put("usuario", "");
             contenido.put("psswd", "");
             guardarArchivo(ruta);
         }
@@ -67,6 +67,15 @@ public class ManejarIni {
     public boolean cambiar(String key, String value){
        if(contenido.containsKey(key)){
            contenido.replace(key, value);
+           if(key.equals("dbUrl")){
+               this.dbUrl=value;
+           }
+           else if(key.equals("usuario")){
+               this.usuario=value;
+           }
+           else{
+               this.psswd=value;
+           }
            return true;
        }
        else return false;

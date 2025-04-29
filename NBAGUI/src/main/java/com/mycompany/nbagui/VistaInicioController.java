@@ -8,14 +8,24 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.RadioButton;
 
 public class VistaInicioController implements Initializable {
 
-    @FXML private TextField tfIP;
-    @FXML private TextField tfUsuario;
-    @FXML private TextField tfContraseña;
-    @FXML private Button butonAceptar;
-    @FXML private Button botonSalir;
+    @FXML 
+    private TextField tfIP;
+    @FXML
+    private TextField tfUsuario;
+    @FXML
+    private TextField tfContraseña;
+    @FXML
+    private Button butonAceptar;
+    @FXML
+    private Button botonSalir;
+    @FXML
+    private RadioButton gini;
+    @FXML
+    private RadioButton gxml;
     
     private NBAGUI nbagui;
     private ManejarIni mIni;
@@ -28,23 +38,24 @@ public class VistaInicioController implements Initializable {
     }
 
     
-    public void cargarConfiguracionInicial() {
+    public boolean cargarConfiguracionInicial() {
         try {
             mIni = new ManejarIni(rutaConfig);
             tfIP.setText(mIni.getDbUrl());
             tfUsuario.setText(mIni.getUsuario());
             tfContraseña.setText(mIni.getPsswd());
+            conector=new ConectorSQL(mIni.getDbUrl(),mIni.getUsuario(),mIni.getPsswd());
+            return true;
         } catch (Exception e) {
-            mostrarAlerta("Error", "No se pudo cargar la configuración", "Se creará un archivo de configuración nuevo.");
-            crearConfiguracionPorDefecto();
+            mostrarAlerta("Error", "No se pudo cargar la configuración", "Se abrirá el menú de configuración.");    
+            return false;
         }
     }
     
     public void manejarConexion() {
         // Validar campos
         if (tfIP.getText().isEmpty() || tfUsuario.getText().isEmpty()) {
-            mostrarAlerta("Error", "Campos vacíos", 
-                         "Debe completar al menos IP y Usuario");
+            mostrarAlerta("Error", "Campos vacíos", "Debe completar al menos IP y Usuario");
             return;
         }
         
