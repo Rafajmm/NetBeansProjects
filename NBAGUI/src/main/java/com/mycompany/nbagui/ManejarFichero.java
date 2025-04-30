@@ -1,0 +1,171 @@
+package com.mycompany.nbagui;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
+import java.io.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+@XmlRootElement(name="ManejarFichero")
+@XmlType(propOrder={"contenido","dbUrl","usuario","psswd"})
+@XmlAccessorType(XmlAccessType.FIELD) 
+public class ManejarFichero {
+    @XmlElement(name="contenido")
+    private LinkedHashMap<String, String> contenido = new LinkedHashMap<>();
+    
+    @XmlElement(name="dbUrl")
+    private String dbUrl;
+    @XmlElement(name="usuario")
+    private String usuario;
+    @XmlElement(name="psswd")
+    private String psswd;
+    
+    public ManejarFichero(String ruta) {
+        if (!ruta.endsWith(".ini") && !ruta.endsWith(".xml")) {
+            throw new IllegalArgumentException("El archivo debe tener extensión .ini o .xml");
+        }
+        cargarArchivo(ruta);
+    }
+    public ManejarFichero(){}
+    
+    private void cargarArchivo(String ruta) {
+        if(ruta.endsWith(".ini")){
+            try (BufferedReader leer = new BufferedReader(new FileReader(ruta))) {
+                String linea;
+                while ((linea = leer.readLine()) != null) {
+                    linea = linea.trim();
+                    if (linea.isEmpty() || linea.startsWith("[") || 
+                        linea.startsWith(";") || linea.startsWith("#")) {
+                        continue;
+                    }
+
+                    String[] partes = linea.split("=", 2);
+                    String clave = partes[0].trim();
+                    String valor = partes.length > 1 ? partes[1].trim() : null;
+                    
+
+                    if ("dbUrl".equals(clave)) {
+                        this.dbUrl = valor;
+                        } 
+                        else if ("usuario".equals(clave)) {
+                            this.usuario = valor;
+                        } 
+                        else if ("psswd".equals(clave)) {
+                            this.psswd = valor;
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("Error al leer archivo: " + e.getMessage());
+                
+            }
+        }
+        else{
+            try{
+                JAXBContext contexto = JAXBContext.newInstance(ManejarFichero.class);
+                Unmarshaller um=contexto.createUnmarshaller();
+                ManejarFichero temp=(ManejarFichero)um.unmarshal(new File("config.xml"));
+                this.contenido=temp.contenido;
+                this.dbUrl = temp.dbUrl;
+                this.usuario = temp.usuario;
+                this.psswd = temp.psswd;                
+            }
+            catch (JAXBException ex) {
+                Logger.getLogger(ManejarFichero.class.getName()).log(Level.SEVERE, null, ex);
+                
+            }
+        }
+    }
+    
+    public void guardarArchivo(String ruta) {
+        if(ruta.endsWith(".ini")){
+            try (BufferedWriter escribir = new BufferedWriter(new FileWriter(ruta))) {
+                for (Map.Entry<String, String> entrada : contenido.entrySet()) {
+                    escribir.write(entrada.getKey() + "=" +(entrada.getValue() != null ? entrada.getValue() : ""));
+                    escribir.newLine();
+                }
+            } 
+            catch (IOException ex) {
+                System.err.println("Error al guardar archivo: " + ex.getMessage());
+            }
+        }
+        else if(ruta.endsWith(".xml")){
+            try{
+                JAXBContext contexto = JAXBContext.newInstance(ManejarFichero.class);
+                Marshaller m = contexto.createMarshaller();
+                m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                m.marshal(this, new File(ruta));
+            }
+            catch(JAXBException ex){
+                System.err.println("Error al guardar archivo XML: " + ex.getMessage());
+            }
+        }
+    }
+    
+    
+    
+    public boolean cambiar(String key, String value){
+       if(contenido.containsKey(key)){
+           contenido.replace(key, value);
+           if(key.equals("dbUrl")){
+               this.dbUrl=value;
+           }
+           else if(key.equals("usuario")){
+               this.usuario=value;
+           }
+           else{
+               this.psswd=value;
+           }
+           return true;
+       }
+       else return false;
+    }
+    
+    public boolean añadir(String key, String value){
+        if(contenido.containsKey(key)) return false;
+        else{
+            contenido.put(key, value);
+            return true;
+        }
+    }
+    
+    public String consultar(String key){
+        if(contenido.containsKey(key)){
+            return contenido.get(key);
+        }
+        else return null;
+    }
+    
+    public boolean borrar(String key){
+        if(contenido.containsKey(key)){
+            contenido.remove(key);            
+            return true;
+        }
+        else return false;
+    }
+    
+    public LinkedHashMap getContenido(){
+        return contenido;
+    }
+
+    public String getDbUrl() {
+        return dbUrl;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public String getPsswd() {
+        return psswd;
+    }
+        
+}

@@ -25,5 +25,11 @@ public class ConectorSQL {
             System.out.println("Base de datos desconectada");
         }
     }
+
+    public Connection getConexion() {
+        return conexion;
+    }
+    
+    
     
 }

@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class NBAGUI extends Application {
+    private ConectorSQL conexion;
+    private ManejarFichero fich;
     
     private static Scene escenaPrincipal;
     private VistaInicioController inicioController;

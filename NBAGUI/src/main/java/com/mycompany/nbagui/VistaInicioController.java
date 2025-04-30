@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 
 public class VistaInicioController implements Initializable {
 
@@ -26,29 +27,43 @@ public class VistaInicioController implements Initializable {
     private RadioButton gini;
     @FXML
     private RadioButton gxml;
+    private ToggleGroup grupo;
     
     private NBAGUI nbagui;
-    private ManejarIni mIni;
-    private static final String rutaConfig = "./config.ini"; // Cambiado a ruta relativa más simple
+    private ManejarFichero mIni;
+    private static final String rutaConfig = "./config.ini"; 
+    private static final String rutaConfig2="./config.xml";
     private ConectorSQL conector;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        grupo = new ToggleGroup();
+        gini.setToggleGroup(grupo);
+        gxml.setToggleGroup(grupo);
     }
 
     
     public boolean cargarConfiguracionInicial() {
         try {
-            mIni = new ManejarIni(rutaConfig);
+            mIni = new ManejarFichero(rutaConfig);
             tfIP.setText(mIni.getDbUrl());
             tfUsuario.setText(mIni.getUsuario());
             tfContraseña.setText(mIni.getPsswd());
             conector=new ConectorSQL(mIni.getDbUrl(),mIni.getUsuario(),mIni.getPsswd());
             return true;
         } catch (Exception e) {
-            mostrarAlerta("Error", "No se pudo cargar la configuración", "Se abrirá el menú de configuración.");    
-            return false;
+            try{
+                mIni = new ManejarFichero(rutaConfig2);
+                tfIP.setText(mIni.getDbUrl());
+                tfUsuario.setText(mIni.getUsuario());
+                tfContraseña.setText(mIni.getPsswd());
+                conector=new ConectorSQL(mIni.getDbUrl(),mIni.getUsuario(),mIni.getPsswd());
+                return true;
+            }
+            catch(Exception ex){
+                mostrarAlerta("Error", "No se pudo cargar la configuración", "Se abrirá el menú de configuración.");    
+                return false;
+            }
         }
     }
     
@@ -63,8 +78,13 @@ public class VistaInicioController implements Initializable {
         mIni.cambiar("dbUrl", tfIP.getText());
         mIni.cambiar("usuario", tfUsuario.getText());
         mIni.cambiar("psswd", tfContraseña.getText());
-        mIni.guardarArchivo(rutaConfig); // Guardar cambios
         
+        if(gini.isSelected()){
+            mIni.guardarArchivo(rutaConfig); 
+        }
+        else{
+            mIni.guardarArchivo(rutaConfig2);            
+        }
         // Intentar conectar 
         try {
             conector = new ConectorSQL(mIni.getDbUrl(),mIni.getUsuario(),mIni.getPsswd());
@@ -73,14 +93,7 @@ public class VistaInicioController implements Initializable {
         } catch (Exception e) {
             mostrarAlerta("Error", "Error de conexión", "No se pudo establecer conexión: " + e.getMessage());
         }
-    }
-    
-    private void crearConfiguracionPorDefecto() {
-        mIni.cambiar("dbUrl", "localhost");
-        mIni.cambiar("usuario", "root");
-        mIni.cambiar("psswd", "");
-        mIni.guardarArchivo(rutaConfig);
-    }
+    }    
     
     private void mostrarAlerta(String titulo, String encabezado, String contenido) {
         Alert alert = new Alert(AlertType.INFORMATION);
@@ -93,6 +106,12 @@ public class VistaInicioController implements Initializable {
     public void setNBAGUI(NBAGUI nbagui) {
         this.nbagui = nbagui;
     }
+
+    public ManejarFichero getmIni() {
+        return mIni;
+    }
+    
+    
     
     public void Salir(){
         System.exit(0);
