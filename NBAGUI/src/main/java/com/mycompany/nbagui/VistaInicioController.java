@@ -70,6 +70,8 @@ public class VistaInicioController implements Initializable {
     }
     
     public void manejarConexion() {
+        mIni.resetearAtributos();
+        mIni.toString();
         if (tfIP.getText().isEmpty() || tfUsuario.getText().isEmpty()) {
             mostrarAlerta("Error", "Campos vacíos", "Debe completar al menos IP y Usuario");
             return;
@@ -91,7 +93,7 @@ public class VistaInicioController implements Initializable {
             nbagui.cambiarVista("VistaPrincipal");
             mostrarAlerta("Éxito", "Conexión establecida", "Configuración guardada correctamente");
         } catch (Exception e) {
-            mostrarAlerta("Error", "Error de conexión", "No se pudo establecer conexión: " + e.getMessage());
+            mostrarAlerta("Error", "Error de conexión", "No se pudo establecer conexión (método manejarConexion): " + e.getMessage());
         }
     }    
     
@@ -111,7 +113,14 @@ public class VistaInicioController implements Initializable {
         return mIni;
     }
     
-    
+    public void setmIni(ManejarFichero mIni) {
+        this.mIni = mIni;
+        if(mIni != null) {
+            tfIP.setText(mIni.getDbUrl());
+            tfUsuario.setText(mIni.getUsuario());
+            tfContraseña.setText(mIni.getPsswd());
+        }
+    }
     
     public void Salir(){
         System.exit(0);

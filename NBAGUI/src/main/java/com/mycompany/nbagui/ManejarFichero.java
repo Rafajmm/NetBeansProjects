@@ -35,7 +35,14 @@ public class ManejarFichero {
         }
         cargarArchivo(ruta);
     }
-    public ManejarFichero(){}
+    public ManejarFichero(){
+        contenido.put("dbUrl", "");
+        contenido.put("usuario", "");
+        contenido.put("psswd", "");
+        dbUrl="";
+        usuario="";
+        psswd="";
+    }
     
     private void cargarArchivo(String ruta) {
         if(ruta.endsWith(".ini")){
@@ -55,12 +62,12 @@ public class ManejarFichero {
 
                     if ("dbUrl".equals(clave)) {
                         this.dbUrl = valor;
-                        } 
-                        else if ("usuario".equals(clave)) {
-                            this.usuario = valor;
-                        } 
-                        else if ("psswd".equals(clave)) {
-                            this.psswd = valor;
+                    } 
+                    else if ("usuario".equals(clave)) {
+                        this.usuario = valor;
+                    } 
+                    else if ("psswd".equals(clave)) {
+                        this.psswd = valor;
                     }
                 }
             } catch (IOException e) {
@@ -171,7 +178,13 @@ public class ManejarFichero {
     public String getPsswd() {
         return psswd;
     }
-
+    
+    public void resetearAtributos(){
+        cambiar("dbUrl","");
+        cambiar("usuario","");
+        cambiar("psswd","");
+    }
+    
     @Override
     public String toString() {
         return "ManejarFichero{" + "dbUrl=" + dbUrl + ", usuario=" + usuario + ", psswd=" + psswd + '}';

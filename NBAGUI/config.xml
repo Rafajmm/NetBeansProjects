@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ManejarFichero>
-    <contenido>
-        <entry>
-            <key>dbUrl</key>
-            <value>jdbc:mysql://localhost:3307/NBA</value>
-        </entry>
-        <entry>
-            <key>usuario</key>
-            <value>root</value>
-        </entry>
-        <entry>
-            <key>psswd</key>
-        </entry>
-    </contenido>
+    <contenido/>
     <dbUrl>jdbc:mysql://localhost:3307/NBA</dbUrl>
     <usuario>root</usuario>
+    <psswd></psswd>
 </ManejarFichero>

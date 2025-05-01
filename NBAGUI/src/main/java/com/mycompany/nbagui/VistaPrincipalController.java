@@ -1,5 +1,6 @@
 package com.mycompany.nbagui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -94,6 +95,14 @@ public class VistaPrincipalController implements Initializable {
         actualizarEstadisticas();
         configurarTabla();
         
+    }
+    
+    public void abrirConfiguracion(){
+        try {
+            nba.cambiarVista("VistaInicio");
+        } catch (IOException ex) {
+            mostrarAlerta("Error","Error al cambiar de vista","No se ha podido abrir el menú de configuración");
+        }
     }
     
     public void setConectorSQL(ConectorSQL conector) {

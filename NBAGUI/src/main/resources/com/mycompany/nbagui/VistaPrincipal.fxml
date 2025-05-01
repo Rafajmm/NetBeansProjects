@@ -24,7 +24,7 @@
                   <ChoiceBox fx:id="choiceEquiposLocal" layoutX="105.0" layoutY="19.0" prefWidth="150.0" />
                   <ChoiceBox fx:id="choiceEquiposVisitante" layoutX="105.0" layoutY="48.0" prefWidth="150.0" />
                   <Label layoutX="50.0" layoutY="40.0" text="Equipos" />
-                  <Button fx:id="buttonConf" layoutX="881.0" layoutY="14.0" mnemonicParsing="false" text="Configuracion" />
+                  <Button fx:id="buttonConf" layoutX="881.0" layoutY="14.0" mnemonicParsing="false" onAction="#abrirConfiguracion" text="Configuracion" />
                </children>
             </AnchorPane>
             <TableView fx:id="tablaPartidos" prefHeight="623.0" prefWidth="1024.0">
