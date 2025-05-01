@@ -65,7 +65,9 @@ public class ManejarFichero {
                 }
             } catch (IOException e) {
                 System.err.println("Error al leer archivo: " + e.getMessage());
-                
+                contenido.put("dbUrl", "");
+                contenido.put("usuario", "");
+                contenido.put("psswd", "");
             }
         }
         else{
@@ -80,7 +82,9 @@ public class ManejarFichero {
             }
             catch (JAXBException ex) {
                 Logger.getLogger(ManejarFichero.class.getName()).log(Level.SEVERE, null, ex);
-                
+                contenido.put("dbUrl", "");
+                contenido.put("usuario", "");
+                contenido.put("psswd", "");
             }
         }
     }
@@ -113,20 +117,20 @@ public class ManejarFichero {
     
     
     public boolean cambiar(String key, String value){
-       if(contenido.containsKey(key)){
-           contenido.replace(key, value);
-           if(key.equals("dbUrl")){
+        if(contenido.containsKey(key)){
+            contenido.replace(key, value);
+            if(key.equals("dbUrl")){
                this.dbUrl=value;
-           }
-           else if(key.equals("usuario")){
+            }
+            else if(key.equals("usuario")){
                this.usuario=value;
-           }
-           else{
+            }
+            else{
                this.psswd=value;
-           }
-           return true;
-       }
-       else return false;
+            }
+            return true;
+        }
+        else return false;
     }
     
     public boolean añadir(String key, String value){
@@ -166,6 +170,11 @@ public class ManejarFichero {
 
     public String getPsswd() {
         return psswd;
+    }
+
+    @Override
+    public String toString() {
+        return "ManejarFichero{" + "dbUrl=" + dbUrl + ", usuario=" + usuario + ", psswd=" + psswd + '}';
     }
         
 }

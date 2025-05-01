@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class NBAGUI extends Application {
     private ConectorSQL conexion;
@@ -16,17 +17,23 @@ public class NBAGUI extends Application {
     private VistaPrincipalController principalController;
     
     @Override
-    public void start(Stage escenarioPrincipal) throws IOException {
-        // Cargar vista de inicio
+    public void start(Stage escenarioPrincipal) throws IOException, SQLException {        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("VistaInicio.fxml"));
-        Parent vistaInicio = loader.load();
-        
+        Parent vistaInicio = loader.load();        
         
         inicioController = loader.getController();
         inicioController.setNBAGUI(this);
         if(inicioController.cargarConfiguracionInicial()){
-            loader=new FXMLLoader(getClass().getResource("VistaPrincipal.fxml"));
-            vistaInicio=loader.load();
+            fich = inicioController.getmIni();
+            conexion = new ConectorSQL(fich.getDbUrl(), fich.getUsuario(), fich.getPsswd());
+
+            loader = new FXMLLoader(getClass().getResource("VistaPrincipal.fxml"));
+            vistaInicio = loader.load();
+
+            principalController = loader.getController();
+            principalController.setNBAGUI(this);
+            principalController.setConectorSQL(conexion); 
+
             escenaPrincipal = new Scene(vistaInicio);
             escenarioPrincipal.setScene(escenaPrincipal);
             escenarioPrincipal.setTitle("NBA");
@@ -41,9 +48,19 @@ public class NBAGUI extends Application {
         }
     }
 
-    public static void cambiarVista(String fxml) throws IOException {
-        FXMLLoader loader = new FXMLLoader(NBAGUI.class.getResource(fxml + ".fxml"));
-        escenaPrincipal.setRoot(loader.load());
+    public void cambiarVista(String fxml) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml + ".fxml"));
+        Parent nuevaVista = loader.load();
+
+        if (fxml.equals("VistaPrincipal")) {
+            principalController = loader.getController();
+            principalController.setNBAGUI(this);
+        } else if (fxml.equals("VistaInicio")) {
+            inicioController = loader.getController();
+            inicioController.setNBAGUI(this);
+        }
+
+        escenaPrincipal.setRoot(nuevaVista);
     }
 
     public static void main(String[] args) {

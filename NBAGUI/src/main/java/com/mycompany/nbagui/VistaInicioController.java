@@ -40,6 +40,7 @@ public class VistaInicioController implements Initializable {
         grupo = new ToggleGroup();
         gini.setToggleGroup(grupo);
         gxml.setToggleGroup(grupo);
+        gini.setSelected(true);
     }
 
     
@@ -51,7 +52,8 @@ public class VistaInicioController implements Initializable {
             tfContraseña.setText(mIni.getPsswd());
             conector=new ConectorSQL(mIni.getDbUrl(),mIni.getUsuario(),mIni.getPsswd());
             return true;
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             try{
                 mIni = new ManejarFichero(rutaConfig2);
                 tfIP.setText(mIni.getDbUrl());
@@ -68,13 +70,11 @@ public class VistaInicioController implements Initializable {
     }
     
     public void manejarConexion() {
-        // Validar campos
         if (tfIP.getText().isEmpty() || tfUsuario.getText().isEmpty()) {
             mostrarAlerta("Error", "Campos vacíos", "Debe completar al menos IP y Usuario");
             return;
         }
         
-        // Actualizar configuración
         mIni.cambiar("dbUrl", tfIP.getText());
         mIni.cambiar("usuario", tfUsuario.getText());
         mIni.cambiar("psswd", tfContraseña.getText());
@@ -85,10 +85,10 @@ public class VistaInicioController implements Initializable {
         else{
             mIni.guardarArchivo(rutaConfig2);            
         }
-        // Intentar conectar 
+
         try {
             conector = new ConectorSQL(mIni.getDbUrl(),mIni.getUsuario(),mIni.getPsswd());
-            nbagui.cambiarVista("VistaPrincipal"); // Cambiar a vista principal si conexión exitosa
+            nbagui.cambiarVista("VistaPrincipal");
             mostrarAlerta("Éxito", "Conexión establecida", "Configuración guardada correctamente");
         } catch (Exception e) {
             mostrarAlerta("Error", "Error de conexión", "No se pudo establecer conexión: " + e.getMessage());
