@@ -47,5 +47,35 @@ public class Partido {
     public String getTemporada() {
         return temporada;
     }
+
+    public void setEquipoLocal(String equipoLocal) {
+        this.equipoLocal = equipoLocal;
+    }
+
+    public void setConferenciaLocal(String conferenciaLocal) {
+        this.conferenciaLocal = conferenciaLocal;
+    }
+
+    public void setPuntosLocal(int puntosLocal) {
+        this.puntosLocal = puntosLocal;
+    }
+
+    public void setPuntosVisitante(int puntosVisitante) {
+        this.puntosVisitante = puntosVisitante;
+    }
+
+    public void setEquipoVisitante(String equipoVisitante) {
+        this.equipoVisitante = equipoVisitante;
+    }
+
+    public void setConferenciaVisitante(String conferenciaVisitante) {
+        this.conferenciaVisitante = conferenciaVisitante;
+    }
+
+    public void setTemporada(String temporada) {
+        this.temporada = temporada;
+    }
+    
+    
     
 }

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ManejarFichero>
-    <contenido/>
-    <dbUrl>jdbc:mysql://localhost:3307/NBA</dbUrl>
-    <usuario>root</usuario>
-    <psswd></psswd>
-</ManejarFichero>

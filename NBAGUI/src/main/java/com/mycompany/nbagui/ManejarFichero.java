@@ -16,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @XmlRootElement(name="ManejarFichero")
-@XmlType(propOrder={"contenido","dbUrl","usuario","psswd"})
+@XmlType(propOrder={"contenido","dbUrl","usuario","psswd","colorFilaPar","colorFilaImpar"})
 @XmlAccessorType(XmlAccessType.FIELD) 
 public class ManejarFichero {
     @XmlElement(name="contenido")
@@ -29,6 +29,11 @@ public class ManejarFichero {
     @XmlElement(name="psswd")
     private String psswd;
     
+    @XmlElement(name="colorFilaPar")
+    private String colorFilaPar = "#ADD8E6"; 
+    @XmlElement(name="colorFilaImpar")
+    private String colorFilaImpar = "#D3D3D3";
+    
     public ManejarFichero(String ruta) {
         if (!ruta.endsWith(".ini") && !ruta.endsWith(".xml")) {
             throw new IllegalArgumentException("El archivo debe tener extensión .ini o .xml");
@@ -39,9 +44,13 @@ public class ManejarFichero {
         contenido.put("dbUrl", "");
         contenido.put("usuario", "");
         contenido.put("psswd", "");
+        contenido.put("colorFilaPar", "#ADD8E6");
+        contenido.put("colorFilaImpar", "#D3D3D3");
         dbUrl="";
         usuario="";
         psswd="";
+        colorFilaPar = "#ADD8E6";
+        colorFilaImpar = "#D3D3D3";
     }
     
     private void cargarArchivo(String ruta) {
@@ -69,12 +78,20 @@ public class ManejarFichero {
                     else if ("psswd".equals(clave)) {
                         this.psswd = valor;
                     }
+                    else if("colorFilaPar".equals(clave)){
+                        this.colorFilaPar=valor;
+                    }
+                    else if("colorFilaImpar".equals(clave)){
+                        this.colorFilaImpar=valor;
+                    }
                 }
             } catch (IOException e) {
                 System.err.println("Error al leer archivo: " + e.getMessage());
                 contenido.put("dbUrl", "");
                 contenido.put("usuario", "");
                 contenido.put("psswd", "");
+                contenido.put("colorFilaPar", "");
+                contenido.put("colorFilaImpar", "");
             }
         }
         else{
@@ -85,13 +102,17 @@ public class ManejarFichero {
                 this.contenido=temp.contenido;
                 this.dbUrl = temp.dbUrl;
                 this.usuario = temp.usuario;
-                this.psswd = temp.psswd;                
+                this.psswd = temp.psswd;
+                this.colorFilaPar=temp.colorFilaPar;
+                this.colorFilaImpar=temp.colorFilaImpar;
             }
             catch (JAXBException ex) {
                 Logger.getLogger(ManejarFichero.class.getName()).log(Level.SEVERE, null, ex);
                 contenido.put("dbUrl", "");
                 contenido.put("usuario", "");
                 contenido.put("psswd", "");
+                contenido.put("colorFilaPar", "");
+                contenido.put("colorFilaImpar", "");
             }
         }
     }
@@ -124,17 +145,23 @@ public class ManejarFichero {
     
     
     public boolean cambiar(String key, String value){
-        if(contenido.containsKey(key)){
-            contenido.replace(key, value);
+        if(contenido.containsKey(key)){            
             if(key.equals("dbUrl")){
                this.dbUrl=value;
             }
             else if(key.equals("usuario")){
                this.usuario=value;
             }
-            else{
+            else if(key.equals("psswd")){
                this.psswd=value;
             }
+            else if(key.equals("colorFilaPar")){
+                this.colorFilaPar=value;
+            }
+            else if(key.equals("colorFilaImpar")){
+                this.colorFilaImpar=value;
+            }
+            contenido.replace(key, value);
             return true;
         }
         else return false;
@@ -185,9 +212,27 @@ public class ManejarFichero {
         cambiar("psswd","");
     }
     
+    public String getColorFilaPar() {
+        return colorFilaPar;
+    }
+
+    public void setColorFilaPar(String colorFilaPar) {
+        this.colorFilaPar = colorFilaPar;
+    }
+
+    public String getColorFilaImpar() {
+        return colorFilaImpar;
+    }
+
+    public void setColorFilaImpar(String colorFilaImpar) {
+        this.colorFilaImpar = colorFilaImpar;
+    }
+
     @Override
     public String toString() {
-        return "ManejarFichero{" + "dbUrl=" + dbUrl + ", usuario=" + usuario + ", psswd=" + psswd + '}';
+        return "ManejarFichero{" + "contenido=" + contenido + ", dbUrl=" + dbUrl + ", usuario=" + usuario + ", psswd=" + psswd + ", colorFilaPar=" + colorFilaPar + ", colorFilaImpar=" + colorFilaImpar + '}';
     }
+    
+    
         
 }

@@ -7,22 +7,36 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.GridPane;
+import javafx.util.converter.IntegerStringConverter;
 
 public class VistaPrincipalController implements Initializable {
     private NBAGUI nba;
@@ -130,6 +144,7 @@ public class VistaPrincipalController implements Initializable {
         try {
             mIni = new ManejarFichero(rutaConfig);           
             conector=new ConectorSQL(mIni.getDbUrl(),mIni.getUsuario(),mIni.getPsswd());
+            
             return true;
         } 
         catch (Exception e) {
@@ -145,18 +160,282 @@ public class VistaPrincipalController implements Initializable {
         }
     }
     
-    public void iniciar() {
-        try {
-            if (conector.getConexion() != null && !conector.getConexion().isClosed()) {
-                cargarTodosLosDatos();
+
+    private void configurarMenuContextual() {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem agregarItem = new MenuItem("Agregar nuevo partido");
+        MenuItem editarItem = new MenuItem("Editar partido");
+        MenuItem eliminarItem = new MenuItem("Eliminar partido");
+
+        agregarItem.setOnAction(e -> agregarPartido());
+        editarItem.setOnAction(e -> editarPartido());
+        eliminarItem.setOnAction(e -> eliminarPartido());
+
+        contextMenu.getItems().addAll(agregarItem, editarItem, eliminarItem);
+
+        tablaPartidos.setRowFactory(tv -> {
+            TableRow<Partido> row = new TableRow<>();
+
+            row.setOnContextMenuRequested(event -> {
+                if (!row.isEmpty()) {
+                    tablaPartidos.getSelectionModel().select(row.getIndex());
+                    contextMenu.show(row, event.getScreenX(), event.getScreenY());
+                } else {
+                    contextMenu.show(tablaPartidos, event.getScreenX(), event.getScreenY());
+                }
+                event.consume();
+            });
+
+            row.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    if (!row.isEmpty()) {
+                        tablaPartidos.getSelectionModel().select(row.getIndex());
+                        contextMenu.show(row, event.getScreenX(), event.getScreenY());
+                    } else {
+                        contextMenu.show(tablaPartidos, event.getScreenX(), event.getScreenY());
+                    }
+                    event.consume();
+                }
+            });
+
+            return row;
+        });
+
+        tablaPartidos.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                editarItem.setDisable(true);
+                eliminarItem.setDisable(true);
             } else {
-                mostrarAlerta("Error", "Conexión cerrada (metodo iniciar)", "La conexión a la base de datos está cerrada");
+                editarItem.setDisable(false);
+                eliminarItem.setDisable(false);
+            }
+        });
+
+        editarItem.setDisable(true);
+        eliminarItem.setDisable(true);
+
+        tablaPartidos.setContextMenu(contextMenu);
+    }
+    
+    private void agregarPartido() {
+        Dialog<Partido> dialog = new Dialog<>();
+        dialog.setTitle("Agregar nuevo partido");
+        dialog.setHeaderText("Ingrese los datos del nuevo partido");
+
+        ButtonType agregarButtonType = new ButtonType("Agregar", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(agregarButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField equipoLocal = new TextField();
+        TextField equipoVisitante = new TextField();
+        TextField puntosLocal = new TextField("0");
+        TextField puntosVisitante = new TextField("0");
+        TextField temporada = new TextField();
+        TextField codigo = new TextField();
+
+        grid.add(new Label("Equipo local:"), 0, 0);
+        grid.add(equipoLocal, 1, 0);
+        grid.add(new Label("Equipo visitante:"), 0, 1);
+        grid.add(equipoVisitante, 1, 1);
+        grid.add(new Label("Puntos local:"), 0, 2);
+        grid.add(puntosLocal, 1, 2);
+        grid.add(new Label("Puntos visitante:"), 0, 3);
+        grid.add(puntosVisitante, 1, 3);
+        grid.add(new Label("Temporada:"), 0, 4);
+        grid.add(temporada, 1, 4);
+        grid.add(new Label("Codigo del partido:"),0,5);
+        grid.add(codigo, 1, 5);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == agregarButtonType) {
+                Partido nuevoPartido = new Partido();
+                nuevoPartido.setEquipoLocal(equipoLocal.getText());
+                nuevoPartido.setEquipoVisitante(equipoVisitante.getText());
+                nuevoPartido.setPuntosLocal(Integer.parseInt(puntosLocal.getText()));
+                nuevoPartido.setPuntosVisitante(Integer.parseInt(puntosVisitante.getText()));
+                nuevoPartido.setTemporada(temporada.getText());
+
+                nuevoPartido.setConferenciaLocal(obtenerConferenciaEquipo(equipoLocal.getText()));
+                nuevoPartido.setConferenciaVisitante(obtenerConferenciaEquipo(equipoVisitante.getText()));
+
+                return nuevoPartido;
+            }
+            return null;
+        });
+
+        Optional<Partido> result = dialog.showAndWait();
+
+        result.ifPresent(nuevoPartido -> {
+            try {
+                insertarPartidoEnBD(nuevoPartido,Integer.parseInt(codigo.getText()));
+                todosLosPartidos.add(nuevoPartido);
+                mostrarAlerta("Éxito", "Partido agregado", "El nuevo partido se ha agregado correctamente.");
+            } catch (SQLException e) {
+                mostrarErrorBD("Error al agregar partido", e);
+            }
+        });
+        
+        cargarTodosLosDatos();
+    }
+    
+    private String obtenerConferenciaEquipo(String nombreEquipo) {
+        String cons = "SELECT Conferencia FROM equipos WHERE Nombre = ?";
+        try (Connection conn = conector.getConexion();
+             PreparedStatement pst = conn.prepareStatement(cons)) {
+            pst.setString(1, nombreEquipo);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getString("Conferencia");
             }
         } catch (SQLException e) {
-            mostrarErrorBD("Error al verificar conexión", e);
+            e.printStackTrace();
+        }
+        return "Desconocida"; 
+    }
+    
+    private void editarPartido() {
+        Partido partidoSeleccionado = tablaPartidos.getSelectionModel().getSelectedItem();
+        if (partidoSeleccionado != null) {
+            Dialog<Partido> dialog = new Dialog<>();
+            dialog.setTitle("Editar Partido");
+            dialog.setHeaderText("Edite los datos del partido");
+
+            ButtonType buttonTypeGuardar = new ButtonType("Guardar", ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(buttonTypeGuardar, ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField equipoLocal = new TextField(partidoSeleccionado.getEquipoLocal());
+            TextField equipoVisitante = new TextField(partidoSeleccionado.getEquipoVisitante());
+            TextField puntosLocal = new TextField(String.valueOf(partidoSeleccionado.getPuntosLocal()));
+            TextField puntosVisitante = new TextField(String.valueOf(partidoSeleccionado.getPuntosVisitante()));
+            TextField temporada = new TextField(partidoSeleccionado.getTemporada());
+
+            grid.add(new Label("Equipo local:"), 0, 0);
+            grid.add(equipoLocal, 1, 0);
+            grid.add(new Label("Equipo visitante:"), 0, 1);
+            grid.add(equipoVisitante, 1, 1);
+            grid.add(new Label("Puntos local:"), 0, 2);
+            grid.add(puntosLocal, 1, 2);
+            grid.add(new Label("Puntos visitante:"), 0, 3);
+            grid.add(puntosVisitante, 1, 3);
+            grid.add(new Label("Temporada:"), 0, 4);
+            grid.add(temporada, 1, 4);
+
+            dialog.getDialogPane().setContent(grid);
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == buttonTypeGuardar) {
+                    partidoSeleccionado.setEquipoLocal(equipoLocal.getText());
+                    partidoSeleccionado.setEquipoVisitante(equipoVisitante.getText());
+                    partidoSeleccionado.setPuntosLocal(Integer.parseInt(puntosLocal.getText()));
+                    partidoSeleccionado.setPuntosVisitante(Integer.parseInt(puntosVisitante.getText()));
+                    partidoSeleccionado.setTemporada(temporada.getText());
+                    return partidoSeleccionado;
+                }
+                return null;
+            });
+
+            Optional<Partido> result = dialog.showAndWait();
+
+            result.ifPresent(partidoActualizado -> {
+                try {
+                    actualizarPartidoEnBD(partidoActualizado);
+                    int index = todosLosPartidos.indexOf(partidoSeleccionado);
+                    todosLosPartidos.set(index, partidoActualizado);
+                    mostrarAlerta("Éxito", "Partido actualizado", "Los cambios se han guardado correctamente.");
+                } catch (SQLException e) {
+                    mostrarErrorBD("Error al actualizar partido", e);
+                }
+            });
         }
     }
+    
+    private void eliminarPartido() {
+        Partido partidoSeleccionado = tablaPartidos.getSelectionModel().getSelectedItem();
+        if (partidoSeleccionado != null) {
+            Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmacion.setTitle("Confirmar eliminación");
+            confirmacion.setHeaderText("¿Está seguro de eliminar este partido?");
+            confirmacion.setContentText(partidoSeleccionado.getEquipoLocal() + " vs " + 
+                                      partidoSeleccionado.getEquipoVisitante() + " - " + 
+                                      partidoSeleccionado.getTemporada());
 
+            Optional<ButtonType> resultado = confirmacion.showAndWait();
+            if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                try {
+                    eliminarPartidoDeBD(partidoSeleccionado);
+                    todosLosPartidos.remove(partidoSeleccionado);
+                    mostrarAlerta("Éxito", "Partido eliminado", "El partido se ha eliminado correctamente.");
+                } catch (SQLException e) {
+                    mostrarErrorBD("Error al eliminar partido", e);
+                }
+            }
+        }
+        cargarTodosLosDatos();
+    }
+    
+    private void insertarPartidoEnBD(Partido partido, int codigo) throws SQLException {
+        String cons = "INSERT INTO partidos (codigo, equipo_local, puntos_local, puntos_visitante, equipo_visitante, temporada) " +
+                      "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = conector.getConexion();
+             PreparedStatement pst = conn.prepareStatement(cons)) {
+            
+            pst.setInt(1, codigo);
+            pst.setString(2, partido.getEquipoLocal());
+            pst.setInt(3, partido.getPuntosLocal());
+            pst.setInt(4, partido.getPuntosVisitante());
+            pst.setString(5, partido.getEquipoVisitante());
+            pst.setString(6, partido.getTemporada());
+
+            pst.executeUpdate();
+        }
+        
+    }
+    
+    private void eliminarPartidoDeBD(Partido partido) throws SQLException {
+    String cons = "DELETE FROM partidos WHERE equipo_local = ? AND equipo_visitante = ? AND temporada = ?";
+    
+    try (Connection conn = conector.getConexion();
+         PreparedStatement pst = conn.prepareStatement(cons)) {
+        
+        pst.setString(1, partido.getEquipoLocal());
+        pst.setString(2, partido.getEquipoVisitante());
+        pst.setString(3, partido.getTemporada());
+        
+        pst.executeUpdate();
+    }
+}
+
+    private void actualizarPartidoEnBD(Partido partido) throws SQLException {
+        String cons = "UPDATE partidos SET puntos_local = ?, puntos_visitante = ? " +
+                       "WHERE equipo_local = ? AND equipo_visitante = ? AND temporada = ?";
+
+        try (Connection conn = conector.getConexion();
+             PreparedStatement pst = conn.prepareStatement(cons)) {
+
+            pst.setInt(1, partido.getPuntosLocal());
+            pst.setInt(2, partido.getPuntosVisitante());
+            pst.setString(3, partido.getEquipoLocal());
+            pst.setString(4, partido.getEquipoVisitante());
+            pst.setString(5, partido.getTemporada());
+
+            pst.executeUpdate();
+        }
+    }
+    
+    
     
     private void configurarTabla() {
         colEquipoLocal.setCellValueFactory(new PropertyValueFactory<>("equipoLocal"));
@@ -167,7 +446,35 @@ public class VistaPrincipalController implements Initializable {
         colConferenciaVisitante.setCellValueFactory(new PropertyValueFactory<>("conferenciaVisitante"));
         colTemporada.setCellValueFactory(new PropertyValueFactory<>("temporada"));
         
+        tablaPartidos.setEditable(true);        
+        
+        configurarMenuContextual();
+        
         tablaPartidos.setItems(partidosFiltrados);
+        aplicarEstilosTabla();
+                    
+    }
+    
+    private void aplicarEstilosTabla() {
+        tablaPartidos.setRowFactory(tv -> {
+            TableRow<Partido> fila = new TableRow<Partido>() {
+                @Override
+                protected void updateItem(Partido item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (empty || item == null) {
+                        setStyle("");
+                    } else {
+                        if (getIndex() % 2 == 0) {
+                            setStyle("-fx-background-color: " + mIni.getColorFilaPar() + ";");
+                        } else {
+                            setStyle("-fx-background-color: " + mIni.getColorFilaImpar() + ";");
+                        }
+                    }
+                }
+            };
+            return fila;
+        });
     }
     
     private void cargarTodosLosDatos() {
@@ -246,10 +553,10 @@ public class VistaPrincipalController implements Initializable {
         conferenciasDisponibles.clear();
         conferenciasDisponibles.add("Todas");
         
-        String query = "SELECT DISTINCT Conferencia FROM equipos ORDER BY Conferencia";
+        String cons = "SELECT DISTINCT Conferencia FROM equipos ORDER BY Conferencia";
         
         try (Connection conn = conector.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(query);
+             PreparedStatement stmt = conn.prepareStatement(cons);
              ResultSet rs = stmt.executeQuery()) {
             
             while (rs.next()) {
@@ -369,7 +676,6 @@ public class VistaPrincipalController implements Initializable {
             return 0; 
         }
     }
-
     
     private void actualizarEstadisticas() {
         if (partidosFiltrados.isEmpty()) {

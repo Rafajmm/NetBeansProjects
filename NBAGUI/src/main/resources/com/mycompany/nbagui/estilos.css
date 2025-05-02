@@ -1,0 +1,62 @@
+/* Colores NBA ajustados para mejor contraste */
+.nba-blue { -fx-text-fill: #1D428A; }  /* Azul NBA para texto */
+.nba-red { -fx-text-fill: #C9082A; }   /* Rojo NBA para acentos */
+.nba-yellow { -fx-text-fill: #FFC72C; } /* Amarillo NBA para highlights */
+
+/* Fondo principal claro */
+.root {
+    -fx-background-color: #F8F8F8;
+    -fx-font-family: 'Arial', sans-serif;
+}
+
+/* Botones con contraste mejorado */
+.button {
+    -fx-background-color: #1D428A; /* Azul NBA */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+}
+
+.button:hover {
+    -fx-background-color: #C9082A; /* Rojo NBA al hover */
+}
+
+/* Tabla de partidos - Texto oscuro sobre fondo claro */
+.table-view {
+    -fx-base: #FFFFFF;
+    -fx-control-inner-background: white;
+    -fx-table-header-border-color: #1D428A;
+}
+
+.table-view .column-header {
+    -fx-background-color: #1D428A;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Celdas de la tabla - Texto negro legible */
+.table-cell {
+    -fx-text-fill: #000000;
+    -fx-font-size: 12px;
+}
+
+/* Labels con contraste garantizado */
+.label {
+    -fx-text-fill: #333333; /* Gris oscuro para mejor lectura */
+    -fx-font-weight: bold;
+}
+
+.label-titulo {
+    -fx-font-size: 20px;
+    -fx-text-fill: #1D428A; /* Azul NBA para títulos */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0.5, 1, 1);
+}
+
+/* Campos de texto y choice-box */
+.text-field, .choice-box {
+    -fx-background-color: white;
+    -fx-border-color: #1D428A;
+    -fx-border-width: 1px;
+    -fx-text-fill: #000000; /* Texto negro */
+}

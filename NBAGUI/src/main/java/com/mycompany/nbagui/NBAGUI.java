@@ -64,6 +64,12 @@ public class NBAGUI extends Application {
         escenaPrincipal.setRoot(nuevaVista);
     }
 
+    public void setFich(ManejarFichero fich) {
+        this.fich = fich;
+    }
+    
+    
+
     public static void main(String[] args) {
         launch();
     }
