@@ -283,6 +283,7 @@ public class VistaPrincipalController implements Initializable {
         });
         
         cargarTodosLosDatos();
+        actualizarEstadisticas();
     }
     
     private String obtenerConferenciaEquipo(String nombreEquipo) {
@@ -359,6 +360,7 @@ public class VistaPrincipalController implements Initializable {
                 }
             });
         }
+        actualizarEstadisticas();
     }
     
     private void eliminarPartido() {
@@ -383,6 +385,7 @@ public class VistaPrincipalController implements Initializable {
             }
         }
         cargarTodosLosDatos();
+        actualizarEstadisticas();
     }
     
     private void insertarPartidoEnBD(Partido partido, int codigo) throws SQLException {
@@ -401,22 +404,21 @@ public class VistaPrincipalController implements Initializable {
 
             pst.executeUpdate();
         }
-        
     }
     
     private void eliminarPartidoDeBD(Partido partido) throws SQLException {
-    String cons = "DELETE FROM partidos WHERE equipo_local = ? AND equipo_visitante = ? AND temporada = ?";
-    
-    try (Connection conn = conector.getConexion();
-         PreparedStatement pst = conn.prepareStatement(cons)) {
-        
-        pst.setString(1, partido.getEquipoLocal());
-        pst.setString(2, partido.getEquipoVisitante());
-        pst.setString(3, partido.getTemporada());
-        
-        pst.executeUpdate();
+        String cons = "DELETE FROM partidos WHERE equipo_local = ? AND equipo_visitante = ? AND temporada = ?";
+
+        try (Connection conn = conector.getConexion();
+             PreparedStatement pst = conn.prepareStatement(cons)) {
+
+            pst.setString(1, partido.getEquipoLocal());
+            pst.setString(2, partido.getEquipoVisitante());
+            pst.setString(3, partido.getTemporada());
+
+            pst.executeUpdate();
+        }
     }
-}
 
     private void actualizarPartidoEnBD(Partido partido) throws SQLException {
         String cons = "UPDATE partidos SET puntos_local = ?, puntos_visitante = ? " +
