@@ -158,6 +158,7 @@ public class ConectorSQL {
         return equipos;
     }
 
+    //Método para obtener la conferencia de un equipo
     public String obtenerConferenciaEquipo(String nombreEquipo) throws SQLException {
         String cons = "SELECT Conferencia FROM equipos WHERE Nombre = ?";
         try (PreparedStatement pst = getConexion().prepareStatement(cons)) {
