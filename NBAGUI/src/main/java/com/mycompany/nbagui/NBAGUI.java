@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
+import javafx.scene.image.Image;
 
 public class NBAGUI extends Application {
     private ConectorSQL conexion;
@@ -37,6 +38,7 @@ public class NBAGUI extends Application {
             escenaPrincipal = new Scene(vistaInicio);
             escenarioPrincipal.setScene(escenaPrincipal);
             escenarioPrincipal.setTitle("NBA");
+            escenarioPrincipal.getIcons().add(new Image("file:./src/main/resources/com/mycompany/nbagui/icono32.png"));
             escenarioPrincipal.show();
         }
         
@@ -44,6 +46,7 @@ public class NBAGUI extends Application {
             escenaPrincipal = new Scene(vistaInicio);
             escenarioPrincipal.setScene(escenaPrincipal);
             escenarioPrincipal.setTitle("NBA");
+            escenarioPrincipal.getIcons().add(new Image("file:./src/main/resources/com/mycompany/nbagui/icono32.png"));
             escenarioPrincipal.show();
         }
     }
@@ -62,6 +65,7 @@ public class NBAGUI extends Application {
         }
 
         escenaPrincipal.setRoot(nuevaVista);
+        
     }
 
     public void setFich(ManejarFichero fich) {

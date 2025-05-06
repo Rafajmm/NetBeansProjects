@@ -28,12 +28,12 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="butonAceptar" layoutX="317.0" layoutY="625.0" mnemonicParsing="false" onAction="#manejarConexion" text="Aceptar" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="317.0">
+      <Button fx:id="butonAceptar" layoutX="371.0" layoutY="627.0" mnemonicParsing="false" onAction="#manejarConexion" text="Aceptar" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="371.0">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="botonSalir" layoutX="454.0" layoutY="625.0" mnemonicParsing="false" onAction="#Salir" text="Salir" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="454.0">
+      <Button fx:id="botonSalir" layoutX="553.0" layoutY="627.0" mnemonicParsing="false" onAction="#Salir" prefWidth="100.0" text="Salir" AnchorPane.bottomAnchor="56.0" AnchorPane.leftAnchor="553.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -42,7 +42,7 @@
       <RadioButton fx:id="gxml" layoutX="64.0" layoutY="496.0" mnemonicParsing="false" text="Guardar en .xml" />
       <ColorPicker fx:id="colorPickerPar" layoutX="330.0" layoutY="461.0" />
       <ColorPicker fx:id="colorPickerImpar" layoutX="330.0" layoutY="492.0" />
-      <Label layoutX="499.0" layoutY="465.0" text="Color para lineas pares" />
-      <Label layoutX="499.0" layoutY="496.0" text="Color para lineas impares" />
+      <Label layoutX="526.0" layoutY="466.0" text="Color para lineas pares" />
+      <Label layoutX="527.0" layoutY="497.0" text="Color para lineas impares" />
    </children>
 </AnchorPane>

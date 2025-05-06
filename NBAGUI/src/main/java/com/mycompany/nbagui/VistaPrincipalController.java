@@ -34,8 +34,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
 public class VistaPrincipalController implements Initializable {
@@ -56,6 +58,8 @@ public class VistaPrincipalController implements Initializable {
     private Button buttonAplicar;
     @FXML 
     private Button buttonConf;
+    @FXML 
+    private Button buttonSalir;
     
     @FXML 
     private TableView<Partido> tablaPartidos;
@@ -165,14 +169,16 @@ public class VistaPrincipalController implements Initializable {
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem agregarItem = new MenuItem("Agregar nuevo partido");
+        MenuItem leerItem = new MenuItem("Ver partido");
         MenuItem editarItem = new MenuItem("Editar partido");
         MenuItem eliminarItem = new MenuItem("Eliminar partido");
 
         agregarItem.setOnAction(e -> agregarPartido());
+        leerItem.setOnAction(e -> leerPartido());
         editarItem.setOnAction(e -> editarPartido());
         eliminarItem.setOnAction(e -> eliminarPartido());
 
-        contextMenu.getItems().addAll(agregarItem, editarItem, eliminarItem);
+        contextMenu.getItems().addAll(agregarItem, leerItem, editarItem, eliminarItem);
 
         tablaPartidos.setRowFactory(tv -> {
             TableRow<Partido> row = new TableRow<>();
@@ -204,25 +210,27 @@ public class VistaPrincipalController implements Initializable {
 
         tablaPartidos.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null) {
+                leerItem.setDisable(true);
                 editarItem.setDisable(true);
                 eliminarItem.setDisable(true);
             } else {
+                leerItem.setDisable(false);
                 editarItem.setDisable(false);
                 eliminarItem.setDisable(false);
             }
         });
-
-        editarItem.setDisable(true);
-        eliminarItem.setDisable(true);
+        
+        //editarItem.setDisable(true);
+        //eliminarItem.setDisable(true);
 
         tablaPartidos.setContextMenu(contextMenu);
     }
     
     private void agregarPartido() {
-        Dialog<Partido> dialog = new Dialog<>();
+        Dialog<Partido> dialog = new Dialog<>();        
         dialog.setTitle("Agregar nuevo partido");
         dialog.setHeaderText("Ingrese los datos del nuevo partido");
-
+        
         ButtonType agregarButtonType = new ButtonType("Agregar", ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(agregarButtonType, ButtonType.CANCEL);
 
@@ -282,7 +290,7 @@ public class VistaPrincipalController implements Initializable {
             }
         });
         
-        cargarTodosLosDatos();
+        actulizarOpcionesFiltros();
         actualizarEstadisticas();
     }
     
@@ -360,6 +368,7 @@ public class VistaPrincipalController implements Initializable {
                 }
             });
         }
+        actulizarOpcionesFiltros();
         actualizarEstadisticas();
     }
     
@@ -384,8 +393,44 @@ public class VistaPrincipalController implements Initializable {
                 }
             }
         }
-        cargarTodosLosDatos();
+        actulizarOpcionesFiltros();
         actualizarEstadisticas();
+    }
+    
+    private void leerPartido() {
+        Partido partidoSeleccionado = tablaPartidos.getSelectionModel().getSelectedItem();
+        if (partidoSeleccionado != null) {
+            Dialog<Partido> dialog = new Dialog<>();
+            dialog.setTitle("Ver partido");
+            dialog.setHeaderText("Datos del partido");
+            
+            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            Label equipoLocal = new Label(partidoSeleccionado.getEquipoLocal());
+            Label equipoVisitante = new Label(partidoSeleccionado.getEquipoVisitante());
+            Label puntosLocal = new Label(String.valueOf(partidoSeleccionado.getPuntosLocal()));
+            Label puntosVisitante = new Label(String.valueOf(partidoSeleccionado.getPuntosVisitante()));
+            Label temporada = new Label(partidoSeleccionado.getTemporada());
+
+            grid.add(new Label("Equipo local:"), 0, 0);
+            grid.add(equipoLocal, 1, 0);
+            grid.add(new Label("Equipo visitante:"), 0, 1);
+            grid.add(equipoVisitante, 1, 1);
+            grid.add(new Label("Puntos local:"), 0, 2);
+            grid.add(puntosLocal, 1, 2);
+            grid.add(new Label("Puntos visitante:"), 0, 3);
+            grid.add(puntosVisitante, 1, 3);
+            grid.add(new Label("Temporada:"), 0, 4);
+            grid.add(temporada, 1, 4);
+
+            dialog.getDialogPane().setContent(grid);           
+            Optional<Partido> result=dialog.showAndWait();
+        }
     }
     
     private void insertarPartidoEnBD(Partido partido, int codigo) throws SQLException {
@@ -486,13 +531,17 @@ public class VistaPrincipalController implements Initializable {
                 return;
             }
 
-            cargarTemporadas();
-            cargarConferencias();
-            cargarEquipos();
+            actulizarOpcionesFiltros();
             cargarDatosPartidos();
         } catch (SQLException e) {
             mostrarErrorBD("Error al cargar datos", e);
         }
+    }
+    
+    public void actulizarOpcionesFiltros(){
+        cargarConferencias();
+        cargarTemporadas();
+        cargarEquipos();
     }
     
     public void cargarDatosPartidos() {
@@ -530,14 +579,15 @@ public class VistaPrincipalController implements Initializable {
         }
     }
     
-    private void cargarTemporadas() throws SQLException {
+    private void cargarTemporadas(){
         temporadasDisponibles.clear();
         temporadasDisponibles.add("Todas");
         
         String cons = "SELECT DISTINCT temporada FROM partidos ORDER BY temporada ASC"; 
 
-        try (PreparedStatement pst = conector.getConexion().prepareStatement(cons);
-             ResultSet rs = pst.executeQuery()) {
+        try (Connection conn = conector.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(cons);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 temporadasDisponibles.add(rs.getString("temporada"));
@@ -548,6 +598,9 @@ public class VistaPrincipalController implements Initializable {
                         
             choiceTemporadas.getSelectionModel().selectFirst();
             choiceTemporadas2.getSelectionModel().selectFirst();
+        }
+        catch(SQLException e){
+            mostrarErrorBD("Error al cargar las temporadas", e);
         }
     }
     
@@ -713,5 +766,8 @@ public class VistaPrincipalController implements Initializable {
         mostrarAlerta("Error de BD", mensaje, e.getMessage());
         e.printStackTrace();
     }
-       
+    
+    public void Salir(){
+        System.exit(0);
+    }
 }

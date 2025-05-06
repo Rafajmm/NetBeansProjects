@@ -129,6 +129,7 @@ public class VistaInicioController implements Initializable {
         alert.setTitle(titulo);
         alert.setHeaderText(encabezado);
         alert.setContentText(contenido);
+        
         alert.showAndWait();
     }
     

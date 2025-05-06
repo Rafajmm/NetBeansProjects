@@ -15,15 +15,15 @@
             <AnchorPane prefHeight="118.0" prefWidth="1024.0">
                <children>
                   <ChoiceBox fx:id="choiceConferencias" layoutX="362.0" layoutY="19.0" prefWidth="150.0" />
-                  <ChoiceBox fx:id="choiceTemporadas" layoutX="672.0" layoutY="19.0" prefWidth="150.0" />
-                  <ChoiceBox fx:id="choiceTemporadas2" layoutX="672.0" layoutY="48.0" prefWidth="150.0" />
-                  <Button fx:id="buttonAplicar" layoutX="881.0" layoutY="60.0" mnemonicParsing="false" onAction="#aplicarFiltros" prefHeight="26.0" prefWidth="105.0" text="Aplicar" />
-                  <Label layoutX="282.0" layoutY="40.0" text="Conferencias" />
-                  <Label layoutX="589.0" layoutY="40.0" text="Temporadas" />
+                  <ChoiceBox fx:id="choiceTemporadas" layoutX="640.0" layoutY="19.0" prefWidth="150.0" />
+                  <ChoiceBox fx:id="choiceTemporadas2" layoutX="640.0" layoutY="48.0" prefWidth="150.0" />
+                  <Button fx:id="buttonAplicar" layoutX="881.0" layoutY="60.0" mnemonicParsing="false" onAction="#aplicarFiltros" prefHeight="31.0" prefWidth="114.0" text="Aplicar" />
+                  <Label layoutX="252.0" layoutY="38.0" text="Conferencias" />
+                  <Label layoutX="537.0" layoutY="41.0" text="Temporadas" />
                   <ChoiceBox fx:id="choiceConferencias2" layoutX="362.0" layoutY="48.0" prefWidth="150.0" />
-                  <ChoiceBox fx:id="choiceEquiposLocal" layoutX="105.0" layoutY="19.0" prefWidth="150.0" />
-                  <ChoiceBox fx:id="choiceEquiposVisitante" layoutX="105.0" layoutY="48.0" prefWidth="150.0" />
-                  <Label layoutX="50.0" layoutY="40.0" text="Equipos" />
+                  <ChoiceBox fx:id="choiceEquiposLocal" layoutX="90.0" layoutY="19.0" prefWidth="150.0" />
+                  <ChoiceBox fx:id="choiceEquiposVisitante" layoutX="90.0" layoutY="48.0" prefWidth="150.0" />
+                  <Label layoutX="20.0" layoutY="38.0" text="Equipos" />
                   <Button fx:id="buttonConf" layoutX="881.0" layoutY="14.0" mnemonicParsing="false" onAction="#abrirConfiguracion" text="Configuracion" />
                </children>
             </AnchorPane>
@@ -40,11 +40,12 @@
             </TableView>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="labelEstadistica1" layoutX="14.0" layoutY="14.0" text="Label" />
-                  <Label fx:id="labelEstadistica2" layoutX="185.0" layoutY="14.0" text="Label" />
-                  <Label fx:id="labelEstadistica3" layoutX="318.0" layoutY="14.0" text="Label" />
-                  <Label fx:id="labelEstadistica4" layoutX="484.0" layoutY="14.0" text="Label" />
-                  <Label fx:id="labelEstadistica5" layoutX="639.0" layoutY="14.0" text="Label" />
+                  <Label fx:id="labelEstadistica1" layoutX="24.0" layoutY="42.0" text="Label" />
+                  <Label fx:id="labelEstadistica2" layoutX="256.0" layoutY="14.0" text="Label" />
+                  <Label fx:id="labelEstadistica3" layoutX="448.0" layoutY="14.0" text="Label" />
+                  <Label fx:id="labelEstadistica4" layoutX="256.0" layoutY="62.0" text="Label" />
+                  <Label fx:id="labelEstadistica5" layoutX="448.0" layoutY="62.0" text="Label" />
+                  <Button fx:id="buttonSalir" layoutX="883.0" layoutY="37.0" mnemonicParsing="false" onAction="#Salir" prefWidth="114.0" text="Salir" />
                </children>
             </AnchorPane>
          </children>
