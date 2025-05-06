@@ -83,11 +83,7 @@ public class VistaInicioController implements Initializable {
     }
     
     public void manejarConexion() {
-        if (mIni == null) {
-            mIni = new ManejarFichero(); 
-        } else {
-            mIni.resetearAtributos();
-        }
+        mIni = new ManejarFichero();
 
         System.out.println("Antes de cambios: " + mIni.toString());
 

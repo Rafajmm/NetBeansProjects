@@ -295,18 +295,12 @@ public class VistaPrincipalController implements Initializable {
     }
     
     private String obtenerConferenciaEquipo(String nombreEquipo) {
-        String cons = "SELECT Conferencia FROM equipos WHERE Nombre = ?";
-        try (Connection conn = conector.getConexion();
-             PreparedStatement pst = conn.prepareStatement(cons)) {
-            pst.setString(1, nombreEquipo);
-            ResultSet rs = pst.executeQuery();
-            if (rs.next()) {
-                return rs.getString("Conferencia");
-            }
+        try {
+            return conector.obtenerConferenciaEquipo(nombreEquipo);
         } catch (SQLException e) {
             e.printStackTrace();
+            return "Desconocida";
         }
-        return "Desconocida"; 
     }
     
     private void editarPartido() {
@@ -434,52 +428,15 @@ public class VistaPrincipalController implements Initializable {
     }
     
     private void insertarPartidoEnBD(Partido partido, int codigo) throws SQLException {
-        String cons = "INSERT INTO partidos (codigo, equipo_local, puntos_local, puntos_visitante, equipo_visitante, temporada) " +
-                      "VALUES (?, ?, ?, ?, ?, ?)";
-
-        try (Connection conn = conector.getConexion();
-             PreparedStatement pst = conn.prepareStatement(cons)) {
-            
-            pst.setInt(1, codigo);
-            pst.setString(2, partido.getEquipoLocal());
-            pst.setInt(3, partido.getPuntosLocal());
-            pst.setInt(4, partido.getPuntosVisitante());
-            pst.setString(5, partido.getEquipoVisitante());
-            pst.setString(6, partido.getTemporada());
-
-            pst.executeUpdate();
-        }
+        conector.insertarPartido(partido, codigo);
     }
     
     private void eliminarPartidoDeBD(Partido partido) throws SQLException {
-        String cons = "DELETE FROM partidos WHERE equipo_local = ? AND equipo_visitante = ? AND temporada = ?";
-
-        try (Connection conn = conector.getConexion();
-             PreparedStatement pst = conn.prepareStatement(cons)) {
-
-            pst.setString(1, partido.getEquipoLocal());
-            pst.setString(2, partido.getEquipoVisitante());
-            pst.setString(3, partido.getTemporada());
-
-            pst.executeUpdate();
-        }
+        conector.eliminarPartido(partido);
     }
 
     private void actualizarPartidoEnBD(Partido partido) throws SQLException {
-        String cons = "UPDATE partidos SET puntos_local = ?, puntos_visitante = ? " +
-                       "WHERE equipo_local = ? AND equipo_visitante = ? AND temporada = ?";
-
-        try (Connection conn = conector.getConexion();
-             PreparedStatement pst = conn.prepareStatement(cons)) {
-
-            pst.setInt(1, partido.getPuntosLocal());
-            pst.setInt(2, partido.getPuntosVisitante());
-            pst.setString(3, partido.getEquipoLocal());
-            pst.setString(4, partido.getEquipoVisitante());
-            pst.setString(5, partido.getTemporada());
-
-            pst.executeUpdate();
-        }
+        conector.actualizarPartido(partido);
     }
     
     
@@ -525,23 +482,43 @@ public class VistaPrincipalController implements Initializable {
     }
     
     private void cargarTodosLosDatos() {
-        try {            
+        try {
             if (conector.getConexion() == null || conector.getConexion().isClosed()) {
-                mostrarAlerta("Error", "Conexión cerrada (método cargar todos los datos)", "La conexión a la base de datos está cerrada");
+                mostrarAlerta("Error", "Conexión cerrada", "La conexión a la base de datos está cerrada");
                 return;
             }
 
             actulizarOpcionesFiltros();
-            cargarDatosPartidos();
+            todosLosPartidos = conector.obtenerTodosLosPartidos();
+            partidosFiltrados = new FilteredList<>(todosLosPartidos);
+            tablaPartidos.setItems(partidosFiltrados);
         } catch (SQLException e) {
             mostrarErrorBD("Error al cargar datos", e);
         }
     }
     
     public void actulizarOpcionesFiltros(){
-        cargarConferencias();
-        cargarTemporadas();
-        cargarEquipos();
+        try {
+            temporadasDisponibles = conector.obtenerTemporadas();
+            conferenciasDisponibles = conector.obtenerConferencias();
+            equiposDisponibles = conector.obtenerEquipos();
+
+            choiceTemporadas.setItems(temporadasDisponibles);
+            choiceTemporadas2.setItems(temporadasDisponibles);
+            choiceConferencias.setItems(conferenciasDisponibles);
+            choiceConferencias2.setItems(conferenciasDisponibles);
+            choiceEquiposLocal.setItems(equiposDisponibles);
+            choiceEquiposVisitante.setItems(equiposDisponibles);
+
+            choiceTemporadas.getSelectionModel().selectFirst();
+            choiceTemporadas2.getSelectionModel().selectFirst();
+            choiceConferencias.getSelectionModel().selectFirst();
+            choiceConferencias2.getSelectionModel().selectFirst();
+            choiceEquiposLocal.getSelectionModel().selectFirst();
+            choiceEquiposVisitante.getSelectionModel().selectFirst();
+        } catch (SQLException e) {
+            mostrarErrorBD("Error al cargar opciones de filtro", e);
+        }
     }
     
     public void cargarDatosPartidos() {
