@@ -747,4 +747,8 @@ public class VistaPrincipalController implements Initializable {
     public void Salir(){
         System.exit(0);
     }
+    
+    public void setmIni(ManejarFichero fich){
+        this.mIni=fich;
+    }
 }

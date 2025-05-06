@@ -58,10 +58,10 @@ public class NBAGUI extends Application {
         if (fxml.equals("VistaPrincipal")) {
             principalController = loader.getController();
             principalController.setNBAGUI(this);
+            principalController.setmIni(fich);
         } else if (fxml.equals("VistaInicio")) {
             inicioController = loader.getController();
-            inicioController.setNBAGUI(this);
-            inicioController.setmIni(fich);
+            inicioController.setNBAGUI(this);            
         }
 
         escenaPrincipal.setRoot(nuevaVista);

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ManejarFichero>
+    <contenido>
+        <entry>
+            <key>dbUrl</key>
+            <value>jdbc:mysql://localhost:3307/NBA</value>
+        </entry>
+        <entry>
+            <key>usuario</key>
+            <value>root</value>
+        </entry>
+        <entry>
+            <key>psswd</key>
+            <value></value>
+        </entry>
+        <entry>
+            <key>colorFilaPar</key>
+            <value>#4D3399</value>
+        </entry>
+        <entry>
+            <key>colorFilaImpar</key>
+            <value>#D3D3D3</value>
+        </entry>
+    </contenido>
+    <dbUrl>jdbc:mysql://localhost:3307/NBA</dbUrl>
+    <usuario>root</usuario>
+    <psswd></psswd>
+    <colorFilaPar>#4D3399</colorFilaPar>
+    <colorFilaImpar>#D3D3D3</colorFilaImpar>
+</ManejarFichero>

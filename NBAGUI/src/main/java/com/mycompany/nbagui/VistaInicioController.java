@@ -109,6 +109,7 @@ public class VistaInicioController implements Initializable {
 
         try {
             conector = new ConectorSQL(mIni.getDbUrl(), mIni.getUsuario(), mIni.getPsswd());
+            nbagui.setFich(mIni);
             nbagui.cambiarVista("VistaPrincipal");
             mostrarAlerta("Éxito", "Conexión establecida", "Configuración guardada correctamente");
         } catch (Exception e) {
